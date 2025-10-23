@@ -1,0 +1,42 @@
+.rating {
+  display: flex;
+  flex-direction: row-reverse; // чтобы звезды шли справа налево (5→1)
+  justify-content: left; // <-- центрирует звёзды по горизонтали
+  gap: 6px;
+  font-size: 30px;
+
+  input {
+    position: absolute;
+    appearance: none;
+  }
+
+  label {
+    cursor: pointer;
+    color: #666;
+    transition: color 0.2s;
+
+    &::before {
+      content: '★';
+    }
+  }
+
+  // hover
+  &:not(:checked) > label:hover,
+  &:not(:checked) > label:hover ~ label {
+    color: #ff9e0b;
+  }
+
+  // checked
+  > input:checked ~ label {
+    color: #ffa723;
+  }
+
+  // hover when already checked
+  > input:checked + label:hover,
+  > input:checked + label:hover ~ label,
+  > input:checked ~ label:hover,
+  > input:checked ~ label:hover ~ label,
+  > label:hover ~ input:checked ~ label {
+    color: #e58e09;
+  }
+}

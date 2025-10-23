@@ -1,11 +1,11 @@
 import React from 'react';
-import ConnectionWindow from './pages/ConnectionWindow/ConnectionWindow';
 import './scss/app.scss';
+import PersonalAccountWindow from './pages/PersonalAccountWindow/PersonalAccountWindow';
 
 const App = () => {
   return (
     <div className="app">
-      <ConnectionWindow />
+      <PersonalAccountWindow />
     </div>
   );
 };

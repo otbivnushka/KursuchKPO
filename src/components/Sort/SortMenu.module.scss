@@ -1,0 +1,128 @@
+.burger {
+  position: relative;
+  width: 28px;
+  height: 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 10;
+
+  span {
+    display: block;
+    height: 3px;
+    width: 100%;
+    background: #333;
+    border-radius: 2px;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+  }
+
+  span:nth-child(4) {
+    position: absolute;
+    top: 3px;
+    width: 33%;
+    rotate: 90deg;
+  }
+  span:nth-child(5) {
+    position: absolute;
+    left: 4px;
+    width: 33%;
+    rotate: 90deg;
+  }
+  span:nth-child(6) {
+    position: absolute;
+    bottom: 3px;
+    right: 1px;
+    width: 33%;
+    rotate: 90deg;
+  }
+
+  &.open span:nth-child(4) {
+    transform: translateY(-19px);
+  }
+
+  &.open span:nth-child(5) {
+    transform: translateY(5px);
+  }
+
+  &.open span:nth-child(6) {
+    transform: translateY(10px);
+  }
+}
+
+.sort {
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(-10px);
+  position: absolute;
+  top: 120%;
+  right: 0;
+  z-index: 10;
+
+  width: 250px;
+  padding: 16px;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  background: #fff;
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+
+  transition: all 0.25s ease;
+}
+
+.show {
+  opacity: 1;
+  visibility: visible;
+  transform: translateY(0);
+}
+
+/* элементы внутри */
+.sort label {
+  font-size: 0.9rem;
+  color: #333;
+  margin-bottom: 4px;
+  display: block;
+}
+
+.sort input[type='checkbox'] {
+  display: inline-flex;
+  margin-right: 8px;
+  transform: translateY(1px);
+}
+
+.sort select {
+  width: 100%;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: border-color 0.2s;
+
+  &:focus {
+    border-color: #777;
+    outline: none;
+  }
+}
+
+.sort button {
+  margin-top: 4px;
+  padding: 8px 12px;
+  background: #f4f4f4;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+
+  &:hover {
+    background: #e8e8e8;
+  }
+
+  &:active {
+    transform: scale(0.97);
+  }
+}
