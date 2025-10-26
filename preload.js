@@ -1,6 +1,7 @@
 const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
+  closeApp: () => ipcRenderer.invoke('close-app'),
   connectToServer: (options) => ipcRenderer.invoke('connect-to-server', options),
 
   //selectDirectory: (pictureName) => ipcRenderer.invoke('dialog:selectDirectory', pictureName),

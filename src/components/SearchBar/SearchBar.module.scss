@@ -9,13 +9,15 @@
     font-size: large;
     padding: 8px 15px;
     border-radius: 19px;
-    border: 1px solid #ccc;
-
+    border: 1px solid var(--border-color);
+    background: var(--bg-color);
+    caret-color: var(--text-secondary-color);
+    color: var(--text-color);
     transition: all 0.5s ease-in-out;
   }
 
   .input:focus {
-    border-color: #3498db;
+    border-color: var(--primary-color);
     box-shadow: 0 0 5px rgba(52, 152, 219, 0.3);
   }
 

@@ -6,8 +6,8 @@
 
 .info {
   position: relative;
-  border: #dfdede solid 2px;
-  background-color: #ffffff;
+  border: var(--border-color) solid 2px;
+  background-color: var(--bg-color);
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   margin-top: 50px;
   margin-bottom: 20px;
@@ -20,7 +20,7 @@
     width: 100px;
     height: 100px;
     border-radius: 50%;
-    border: #dfdede solid 2px;
+    border: var(--border-color) solid 2px;
     background-color: white;
     overflow: hidden;
     margin: 0 auto 20px;
@@ -29,5 +29,15 @@
       height: 100%;
       object-fit: cover;
     }
+  }
+}
+
+.account {
+  display: grid;
+  grid-template-rows: auto 1fr auto;
+  &__footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
   }
 }

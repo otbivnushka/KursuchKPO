@@ -8,6 +8,30 @@ const MessagesContainer = () => {
     { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
     { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
     { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
+    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
+    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
+    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
+    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
+    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
+    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
+    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
+    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
+    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
+    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
+    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
+    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
+    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
+    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
+    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
+    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
+    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
+    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
+    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
+    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
+    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
+    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
+    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
+    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
   ];
 
   return (
@@ -31,13 +55,15 @@ const MessagesContainer = () => {
           <div className={styles.table__column_2}>Definition</div>
           <div className={styles.table__column_3}>Note</div>
         </div>
-        {notes.map((note, index) => (
-          <div className={`${styles.table__row}`} key={index}>
-            <div className={styles.table__column_1}>{note.date}</div>
-            <div className={styles.table__column_2}>{note.definition}</div>
-            <div className={styles.table__column_3}>{note.note}</div>
-          </div>
-        ))}
+        <div className={styles.table}>
+          {notes.map((note, index) => (
+            <div className={`${styles.table__row}`} key={index}>
+              <div className={styles.table__column_1}>{note.date}</div>
+              <div className={styles.table__column_2}>{note.definition}</div>
+              <div className={styles.table__column_3}>{note.note}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

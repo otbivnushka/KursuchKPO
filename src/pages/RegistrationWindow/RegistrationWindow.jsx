@@ -1,9 +1,14 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './RegistrationWindow.module.scss';
 import Button from '../../components/Button/Button';
 import TextBox from '../../components/TextBox/TextBox';
 
 const RegistrationWindow = () => {
+  const navigate = useNavigate();
+  const handleGoBack = () => {
+    navigate('/auth');
+  };
   return (
     <div className={styles.connection}>
       <div className={styles.connection__form}>
@@ -22,9 +27,14 @@ const RegistrationWindow = () => {
         </div>
         <div className={styles.connection__buttons}>
           <Button onClick={() => alert('clicked')}>Register</Button>
-          <Button variant="secondary" onClick={() => alert('clicked')}>
-            Close app
-          </Button>
+          <div>
+            <Button variant="secondary" onClick={handleGoBack}>
+              Go back
+            </Button>
+            <Button variant="secondary" onClick={() => alert('clicked')}>
+              Close app
+            </Button>
+          </div>
         </div>
       </div>
     </div>

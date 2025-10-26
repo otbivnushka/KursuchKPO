@@ -25,15 +25,18 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
 });
 
+ipcMain.handle('close-app', () => {
+  app.quit();
+});
+
 ipcMain.handle('connect-to-server', async (event, { ip, port }) => {
-  console.log('🔌 Попытка подключения к', ip, port);
   try {
-    client = new Client(ip, parseInt(port));
-    console.log('✅ Клиент создан успешно');
-    return true;
+    client = new Client(ip, port);
+    await client.connect(5000); // ждёт 5 секунд максимум
+    return { success: true };
   } catch (error) {
     console.error('Ошибка подключения:', error.message);
-    return false;
+    return { success: false, error: error.message };
   }
 });
 

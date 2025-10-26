@@ -55,14 +55,14 @@
     transition: background 0.2s;
     text-decoration: none;
     text-wrap: nowrap;
-    color: #222;
+    color: var(--text-color);
 
     img {
       width: 14px;
     }
 
     &:hover {
-      background: #e2e2e2;
+      background: var(--hover-color);
     }
   }
 
@@ -72,7 +72,7 @@
     top: 120%;
     right: 0;
     flex-direction: column;
-    background: #f6f6f6;
+    background: var(--bg-color);
     border-radius: 10px;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
     padding: 12px;

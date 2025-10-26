@@ -1,2 +1,27 @@
-$black: #232323;
-$background: #eeeeee;
+:root {
+  --bg-color: #eeeeee;
+  --bg-aside-color: #d6d4d4;
+
+  --hover-color: #dbdbdb;
+  --text-color: #232323;
+  --text-secondary-color: #2c3e50;
+  --border-color: #bdbdbd;
+  --primary-color: #007bff;
+  --error-color: #e74c3c;
+
+  --block-text-color: #e0e0e0;
+}
+
+[data-theme='dark'] {
+  --bg-color: #121212;
+  --bg-aside-color: #181818;
+
+  --hover-color: #1e1e1e;
+  --text-color: #e0e0e0;
+  --text-secondary-color: #a0a0a0;
+  --border-color: #2c2c2c;
+  --primary-color: #4dabf7;
+  --error-color: #e57373;
+
+  --block-text-color: #e0e0e0;
+}

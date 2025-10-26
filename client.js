@@ -2,17 +2,40 @@ const net = require('net');
 
 class Client {
   constructor(host = '127.0.0.1', port = 5000) {
-    this.client = net.createConnection({ host, port }, () => {
-      console.log('Connected');
-    });
-
+    this.host = host;
+    this.port = port;
+    this.client = null;
     this.messageQueue = [];
     this.buffer = '';
+  }
 
+  async connect(timeout = 5000) {
+    return new Promise((resolve, reject) => {
+      this.client = net.createConnection({ host: this.host, port: this.port });
+
+      const timer = setTimeout(() => {
+        this.client.destroy();
+        reject(new Error('Connection timeout'));
+      }, timeout);
+
+      this.client.once('connect', () => {
+        clearTimeout(timer);
+        console.log('✅ Connected to server');
+        this._setupListeners();
+        resolve(true);
+      });
+
+      this.client.once('error', (err) => {
+        clearTimeout(timer);
+        reject(new Error('Connection error: ' + err.message));
+      });
+    });
+  }
+
+  _setupListeners() {
     this.client.on('data', (data) => {
       this.buffer += data.toString('utf-8');
-
-      let marker = '<END>';
+      const marker = '<END>';
       let index;
 
       while ((index = this.buffer.indexOf(marker)) !== -1) {
@@ -26,18 +49,18 @@ class Client {
       }
     });
 
-    this.client.on('error', (err) => {
-      console.error('Error:', err.message);
+    this.client.on('end', () => {
+      console.log('🔌 Connection closed');
     });
 
-    this.client.on('end', () => {
-      console.log('Connection closed');
+    this.client.on('error', (err) => {
+      console.error('❌ Socket error:', err.message);
     });
   }
 
   send(message) {
-    const buffer = Buffer.from(message, 'utf-8');
-    this.client.write(buffer);
+    if (!this.client) throw new Error('Client not connected');
+    this.client.write(Buffer.from(message, 'utf-8'));
   }
 
   onceMessage(callback) {
@@ -45,7 +68,7 @@ class Client {
   }
 
   disconnect() {
-    this.client.end();
+    if (this.client) this.client.end();
   }
 }
 

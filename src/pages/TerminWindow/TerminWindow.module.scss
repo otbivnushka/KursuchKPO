@@ -47,7 +47,7 @@
       width: 10px;
     }
     &:hover {
-      background: #e2e2e2;
+      background: var(--hover-color);
     }
   }
 }

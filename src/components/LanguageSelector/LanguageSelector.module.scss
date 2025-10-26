@@ -1,7 +1,7 @@
 .languageSelector {
   display: flex;
   gap: 8px;
-  background: #f7f7f7;
+  background: var(--bg-color);
   padding: 6px;
   border-radius: 8px;
   box-shadow: 0 0 6px rgba(0, 0, 0, 0.1);
@@ -19,12 +19,12 @@
   transition: background 0.2s, color 0.2s;
 
   &:hover {
-    background: #e0e0e0;
+    background: var(--hover-color);
   }
 }
 
 .active {
-  background: #3498db;
-  color: white;
+  background: var(--primary-color);
+  color: var(--bg-color);
   font-weight: 500;
 }
