@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './ConnectionWindow.module.scss';
 import Button from '../../components/Button/Button';
 import TextBox from '../../components/TextBox/TextBox';
@@ -6,25 +7,27 @@ import { useNavigate } from 'react-router-dom';
 import LoadingPageScreen from '../../components/LoadingPageScreen/LoadingPageScreen';
 
 const ConnectionWindow = () => {
-  const [ip, setIp] = useState('');
-  const [port, setPort] = useState('');
+  const [ip, setIp] = useState('127.0.0.1');
+  const [port, setPort] = useState('8888');
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const { t } = useTranslation();
 
   const handleConnect = async () => {
     if (!ip || !port) {
-      alert('Please enter IP and Port');
+      setErrorMessage(t('enter-ip'));
+      setIp('');
+      setPort('');
       return;
     }
     setIsLoading(true);
     const result = await window.api.connectToServer({ ip, port });
-    console.log(result);
     setIsLoading(false);
     if (result.success) {
       navigate('/auth');
     } else {
-      setErrorMessage('Wrong IP or port');
+      setErrorMessage(t('wrong-ip'));
       setIp('');
       setPort('');
     }
@@ -39,15 +42,15 @@ const ConnectionWindow = () => {
       <div className={styles.connection__form}>
         {isLoading && (
           <LoadingPageScreen isActive={isLoading} onClose={() => setIsLoading(false)}>
-            Connecting...
+            {t('connecting')}
           </LoadingPageScreen>
         )}
-        <h3 className={styles.formHeader}>Connection Window</h3>
+        <h3 className={styles.formHeader}>{t('connect-header')}</h3>
 
         <div className={styles.connection__inputs}>
           <TextBox
-            label="IP Address"
-            placeholder="Enter server IP"
+            label={t('ip-address')}
+            placeholder={t('ip-address-placeholder')}
             value={ip}
             onChange={(e) => {
               setIp(e.target.value);
@@ -56,17 +59,17 @@ const ConnectionWindow = () => {
             error={errorMessage}
           />
           <TextBox
-            label="Port"
-            placeholder="Enter port"
+            label={t('port')}
+            placeholder={t('port-placeholder')}
             value={port}
             onChange={(e) => setPort(e.target.value)}
           />
         </div>
 
         <div className={styles.connection__buttons}>
-          <Button onClick={handleConnect}>Connect</Button>
+          <Button onClick={handleConnect}>{t('connect')}</Button>
           <Button variant="secondary" onClick={handleCloseApp}>
-            Close app
+            {t('close-app')}
           </Button>
         </div>
       </div>

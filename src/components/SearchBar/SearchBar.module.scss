@@ -1,11 +1,13 @@
 .searchBar {
   position: relative;
   display: flex;
-  gap: 10px;
   align-items: center;
+  gap: 10px;
+  flex: 1; // чтобы SearchBar сам растягивался внутри header
 
   .input {
-    min-width: 400px;
+    flex: 1;
+    min-width: 200px; // или 400px, как у тебя
     font-size: large;
     padding: 8px 15px;
     border-radius: 19px;
@@ -13,7 +15,7 @@
     background: var(--bg-color);
     caret-color: var(--text-secondary-color);
     color: var(--text-color);
-    transition: all 0.5s ease-in-out;
+    transition: all 0.3s ease-in-out;
   }
 
   .input:focus {
@@ -24,13 +26,20 @@
   .searchButton {
     position: absolute;
     right: 50px;
-    top: 50%;
-    transform: translateY(-50%);
-
-    width: 20px;
-    height: 20px;
+    background-color: transparent;
+    width: 25px;
+    height: 25px;
     border: none;
-    background: url('../../assets/ui/magnifier.png') center/cover no-repeat;
     cursor: pointer;
+    background-size: cover;
+    background-position: center;
+  }
+
+  .searchButtonIconLight {
+    background-image: url('../../assets/ui/magnifier_light.svg');
+  }
+
+  .searchButtonIconDark {
+    background-image: url('../../assets/ui/magnifier_dark.svg');
   }
 }

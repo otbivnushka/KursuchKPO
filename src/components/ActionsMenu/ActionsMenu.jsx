@@ -1,14 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector, useDispatch } from 'react-redux';
+import { fetchUserData } from '../../redux/slices/userSlice';
 import styles from './ActionsMenu.module.scss';
 import likeIcon from '../../assets/ui/like.svg';
+import likedIcon from '../../assets/ui/liked.svg';
 import copyIcon from '../../assets/ui/copy.svg';
 import pinIcon from '../../assets/ui/pin.svg';
+import pinedIcon from '../../assets/ui/pined.svg';
 import sourceIcon from '../../assets/ui/source.svg';
 import printIcon from '../../assets/ui/print.svg';
 import editIcon from '../../assets/ui/edit.svg';
 
-const ActionsMenu = () => {
+const ActionsMenu = ({ id }) => {
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
   const [open, setOpen] = useState(false);
+  const [liked, setLiked] = useState(false);
+  const [pined, setPined] = useState({});
+
+  const definitionInfo = useSelector((state) =>
+    state.definition.items.find((item) => item.id === id)
+  );
+
+  useEffect(() => {
+    dispatch(fetchUserData());
+  }, [dispatch]);
+
+  const favorites = useSelector((state) => state.user.user?.favorites);
+  const pin = useSelector((state) => state.user.user?.notes);
+
+  useEffect(() => {
+    if (favorites) {
+      setLiked(favorites.includes(id));
+    }
+    if (pin) {
+      setPined(pin.find((item) => item.notedTerm === id));
+    }
+  }, [pin, favorites, id]);
+
+  const handleLike = async () => {
+    const response = await window.api.sendAndWaitResponse({
+      Command: 'UPDATE_FAVORITE',
+      Payload: {
+        term: definitionInfo.id,
+        isFavorite: !liked,
+      },
+    });
+    setLiked(!liked);
+    console.log(response);
+  };
+
+  const handlePin = async () => {
+    setPined(!pined);
+  };
 
   return (
     <div className={styles.actions}>
@@ -23,30 +68,34 @@ const ActionsMenu = () => {
       </button>
 
       <div className={`${styles.links} ${open ? styles.show : ''}`}>
-        <a href="https://example.com/">
-          <img src={likeIcon} alt="" />
-          <span>Like</span>
-        </a>
-        <a href="https://example.com/">
+        <button onClick={() => handleLike()}>
+          <img src={liked ? likedIcon : likeIcon} alt="" />
+          <span>{t('like')}</span>
+        </button>
+        <button
+          onClick={() =>
+            navigator.clipboard.writeText(definitionInfo.term + ' - ' + definitionInfo.definition)
+          }
+        >
           <img src={copyIcon} alt="" />
-          <span>Copy</span>
-        </a>
-        <a href="https://example.com/">
-          <img src={pinIcon} alt="" />
-          <span>Pin</span>
-        </a>
-        <a href="https://example.com/">
+          <span>{t('copy')}</span>
+        </button>
+        <button onClick={() => handlePin()}>
+          <img src={pined ? pinedIcon : pinIcon} alt="" />
+          <span>{t('pin')}</span>
+        </button>
+        <button onClick={() => window.api.openBrowserWindow(definitionInfo.source)}>
           <img src={sourceIcon} alt="" />
-          <span>Open source</span>
-        </a>
-        <a href="https://example.com/">
+          <span>{t('source')}</span>
+        </button>
+        <button onClick={() => alert('print')}>
           <img src={printIcon} alt="" />
-          <span>Print</span>
-        </a>
-        <a href="https://example.com/">
+          <span>{t('print')}</span>
+        </button>
+        <button onClick={() => alert('')}>
           <img src={editIcon} alt="" />
-          <span>Edit</span>
-        </a>
+          <span>{t('edit')}</span>
+        </button>
       </div>
     </div>
   );

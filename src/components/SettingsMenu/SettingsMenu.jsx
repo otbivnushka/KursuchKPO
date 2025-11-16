@@ -1,22 +1,17 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector, useDispatch } from 'react-redux';
+import { setTheme, setLang } from '../../redux/slices/settingsSlice';
 import styles from './SettingsMenu.module.scss';
+import SelectBox from '../SelectBox/SelectBox';
 import settingsIconLight from '../../assets/ui/settings_light.svg';
 import settingsIconDark from '../../assets/ui/settings_dark.svg';
 
 const SettingsMenu = () => {
+  const { t } = useTranslation();
+  const dispatch = useDispatch();
+  const { theme, lang } = useSelector((state) => state.settings);
   const [isOpen, setOpen] = React.useState(false);
-  const [theme, setTheme] = React.useState(localStorage.getItem('theme') || 'light');
-  const [lang, setLang] = React.useState(localStorage.getItem('lang') || 'en');
-
-  React.useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme);
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  React.useEffect(() => {
-    localStorage.setItem('lang', lang);
-    // здесь можно добавить логику смены языка (через i18next.changeLanguage(lang))
-  }, [lang]);
 
   return (
     <div className={styles.container}>
@@ -25,39 +20,37 @@ const SettingsMenu = () => {
         onClick={() => setOpen(!isOpen)}
         aria-label="Toggle settings menu"
       >
-        {localStorage.getItem('theme') === 'dark' ? (
-          <img
-            src={settingsIconLight}
-            alt="settings"
-            className={`${styles.icon} ${isOpen ? styles.show__icon : ''}`}
-          />
-        ) : (
-          <img
-            src={settingsIconDark}
-            alt="settings"
-            className={`${styles.icon} ${isOpen ? styles.show__icon : ''}`}
-          />
-        )}
+        <img
+          src={theme === 'dark' ? settingsIconLight : settingsIconDark}
+          alt="settings"
+          className={`${styles.icon} ${isOpen ? styles.show__icon : ''}`}
+        />
       </button>
 
       <div className={`${styles.menu} ${isOpen ? styles.show : ''}`}>
-        <h3>Settings</h3>
+        <h3>{t('settings')}</h3>
 
-        <div className={styles.setting}>
-          <label htmlFor="theme">Theme:</label>
-          <select id="theme" value={theme} onChange={(e) => setTheme(e.target.value)}>
-            <option value="light">Light</option>
-            <option value="dark">Dark</option>
-          </select>
-        </div>
+        <SelectBox
+          label={t('theme')}
+          value={theme}
+          onChange={(e) => dispatch(setTheme(e.target.value))}
+          options={[
+            { value: 'light', label: t('light') },
+            { value: 'dark', label: t('dark') },
+          ]}
+        />
 
-        <div className={styles.setting}>
-          <label htmlFor="language">Language:</label>
-          <select id="language" value={lang} onChange={(e) => setLang(e.target.value)}>
-            <option value="en">English</option>
-            <option value="ru">Русский</option>
-          </select>
-        </div>
+        <SelectBox
+          label={t('language')}
+          value={lang}
+          onChange={(e) => dispatch(setLang(e.target.value))}
+          options={[
+            { value: 'en', label: t('en') },
+            { value: 'ru', label: t('ru') },
+            { value: 'de', label: t('de') },
+            { value: 'be', label: t('be') },
+          ]}
+        />
       </div>
     </div>
   );

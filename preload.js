@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer } = require('electron');
+const { contextBridge, ipcRenderer, clipboard } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
   closeApp: () => ipcRenderer.invoke('close-app'),
@@ -8,8 +8,6 @@ contextBridge.exposeInMainWorld('api', {
   //print: (sth) => ipcRenderer.invoke('print', sth),
   //convert_img: (blob, filename) => ipcRenderer.invoke('convert-to-img', blob, filename),
   //convert_blob: (filepath) => ipcRenderer.invoke('convert-to-blob', filepath),
-
-  sendAndWaitResponse: async (message) => {
-    return await ipcRenderer.invoke('send-message-get-response', message);
-  },
+  openBrowserWindow: (url) => ipcRenderer.invoke('open-browser-window', url),
+  sendAndWaitResponse: (msgObj) => ipcRenderer.invoke('send-message-get-response', msgObj),
 });

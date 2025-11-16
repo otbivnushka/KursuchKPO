@@ -13,7 +13,7 @@ const SliderDifficulty = ({ value, onChange }) => {
         max="5"
         step="1"
         value={value}
-        onChange={onChange}
+        onChange={(e) => onChange(e.target.value)}
         className={styles.slider}
       />
       <div className={styles.scale}>

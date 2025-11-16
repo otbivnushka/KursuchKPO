@@ -1,0 +1,82 @@
+.itemString {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  background-color: var(--bg-color);
+  box-shadow: 1px 1px 3px rgba(34, 60, 80, 0.1);
+  transition: background 0.2s ease;
+
+  /* левая часть (картинка + название) */
+  &__left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1; /* тянется при необходимости, но ограничено */
+    min-width: 220px;
+    max-width: 300px;
+
+    img {
+      width: 60px;
+      height: 60px;
+      border-radius: 6px;
+      object-fit: cover;
+    }
+
+    h3 {
+      font-size: 18px;
+      color: var(--block-text-color);
+      margin: 0;
+      font-weight: 600;
+    }
+  }
+
+  &__info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex: 3;
+    gap: 10px;
+
+    > div {
+      flex: 1;
+      min-width: 150px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+
+    h4 {
+      margin: 2px 0;
+      font-size: 0.9rem;
+      color: var(--block-text-color);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    button {
+      flex-shrink: 0;
+      min-width: 100px;
+      height: 35px;
+    }
+    @media (max-width: 950px) {
+      justify-content: right;
+    }
+  }
+}
+
+.difficulty {
+  @media (max-width: 1212px) {
+    display: none !important;
+  }
+}
+
+.category {
+  @media (max-width: 950px) {
+    display: none !important;
+  }
+}

@@ -19,7 +19,25 @@ function createWindow() {
   win.loadURL('http://localhost:3000');
 }
 
-app.whenReady().then(createWindow);
+function createBrowserWindow(url) {
+  const win = new BrowserWindow({
+    width: 1200,
+    height: 900,
+    webPreferences: {
+      nodeIntegration: false,
+      contextIsolation: true,
+    },
+  });
+
+  win.loadURL(url);
+}
+
+app.whenReady().then(() => {
+  createWindow();
+  ipcMain.handle('open-browser-window', (event, url) => {
+    createBrowserWindow(url);
+  });
+});
 
 app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') app.quit();
@@ -40,14 +58,16 @@ ipcMain.handle('connect-to-server', async (event, { ip, port }) => {
   }
 });
 
-ipcMain.handle('send-message-get-response', async (event, message) => {
+ipcMain.handle('send-message-get-response', async (event, messageObj) => {
   if (!client) {
-    return 'Client not connected.';
+    return { error: 'Client not connected' };
   }
-  return new Promise((resolve, reject) => {
-    client.onceMessage((msg) => {
-      resolve(msg);
+
+  return new Promise((resolve) => {
+    client.onceMessage((response) => {
+      resolve(response);
     });
-    client.send(message);
+
+    client.sendJson(messageObj);
   });
 });

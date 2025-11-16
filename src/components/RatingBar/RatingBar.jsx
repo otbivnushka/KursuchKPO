@@ -1,23 +1,66 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styles from './RatingBar.module.scss';
 
-const RatingBar = () => {
+const RatingBar = ({ rating = null, onSubmit, onCancel }) => {
+  const [selected, setSelected] = useState(rating);
+
+  const handleSelect = (value) => {
+    setSelected(value);
+  };
+
+  const handleCancel = () => {
+    setSelected(null);
+    if (onCancel) onCancel();
+  };
+
+  const handleSubmit = () => {
+    if (onSubmit) onSubmit(selected);
+  };
+
+  // если rating === null и пользователь ещё не выбирал — кнопки не показываем
+  const showButtons = selected !== null;
+
   return (
-    <div className={styles.rating}>
-      <input value="5" name="rate" id="star5" type="radio" />
-      <label title="Excellent" htmlFor="star5"></label>
+    <div className={styles.wrapper}>
+      <div className={styles.rating}>
+        {[5, 4, 3, 2, 1].map((value) => (
+          <React.Fragment key={value}>
+            <input
+              type="radio"
+              id={`star${value}`}
+              name="rate"
+              value={value}
+              checked={selected === value}
+              onChange={() => handleSelect(value)}
+            />
+            <label
+              htmlFor={`star${value}`}
+              title={
+                value === 5
+                  ? 'Excellent'
+                  : value === 4
+                  ? 'Good'
+                  : value === 3
+                  ? 'Average'
+                  : value === 2
+                  ? 'Poor'
+                  : 'Awful'
+              }
+            ></label>
+          </React.Fragment>
+        ))}
+      </div>
 
-      <input value="4" name="rate" id="star4" type="radio" />
-      <label title="Good" htmlFor="star4"></label>
-
-      <input value="3" name="rate" id="star3" type="radio" defaultChecked />
-      <label title="Average" htmlFor="star3"></label>
-
-      <input value="2" name="rate" id="star2" type="radio" />
-      <label title="Poor" htmlFor="star2"></label>
-
-      <input value="1" name="rate" id="star1" type="radio" />
-      <label title="Awful" htmlFor="star1"></label>
+      {showButtons && (
+        <div className={styles.buttons}>
+          <button type="button" onClick={handleCancel}>
+            Отмена
+          </button>
+          <button type="button" onClick={handleSubmit}>
+            Отправить
+          </button>
+        </div>
+      )}
     </div>
   );
 };

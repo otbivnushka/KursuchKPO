@@ -1,0 +1,14 @@
+.logo {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  &__icon {
+    width: 30px;
+    height: 30px;
+    //background: url('../../assets/logo/book.svg') center/cover no-repeat;
+  }
+  &__text {
+    font-size: 1.6rem;
+    font-weight: 900;
+  }
+}

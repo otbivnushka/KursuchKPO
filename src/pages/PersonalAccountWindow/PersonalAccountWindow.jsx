@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import styles from './PersonalAccountWindow.module.scss';
 import userImg from '../../assets/ui/user.svg';
@@ -6,6 +7,7 @@ import MessagesContainer from '../../components/MessagesContainer/MessagesContai
 import Button from '../../components/Button/Button';
 
 const PersonalAccountWindow = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   return (
     <div className={styles.wrapper}>
@@ -15,8 +17,8 @@ const PersonalAccountWindow = () => {
             <img src={userImg} alt="" />
           </div>
           <div className={styles.info__text}>
-            <div className={styles.info__name}>Имя: Жмышенко Валерий Альбертович</div>
-            <div className={styles.info__date}>Дата регистрации: 23.04.2024</div>
+            <div className={styles.info__name}>{t('name')} Жмышенко Валерий Альбертович</div>
+            <div className={styles.info__date}>{t('date-of-registration')} 23.04.2024</div>
           </div>
         </div>
         <MessagesContainer />
@@ -26,7 +28,7 @@ const PersonalAccountWindow = () => {
               navigate('/main');
             }}
           >
-            Return back
+            {t('go-back')}
           </Button>
           <Button
             variant="secondary"
@@ -34,7 +36,7 @@ const PersonalAccountWindow = () => {
               navigate('/auth');
             }}
           >
-            Log out
+            {t('logout')}
           </Button>
         </div>
       </div>

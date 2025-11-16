@@ -10,6 +10,7 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  gap: 15px;
 
   &:hover {
     background-color: var(--hover-color);
@@ -19,7 +20,8 @@
   img {
     width: 20px;
     height: 20px;
-    margin-right: 5px;
+    border-radius: 2px;
+    background: white;
   }
 
   span {

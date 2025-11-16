@@ -1,8 +1,14 @@
+.wrapper {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
 .rating {
   display: flex;
-  flex-direction: row-reverse; // чтобы звезды шли справа налево (5→1)
-  justify-content: left; // <-- центрирует звёзды по горизонтали
+  flex-direction: row-reverse;
   gap: 6px;
+  position: relative;
   font-size: 30px;
 
   input {
@@ -20,23 +26,27 @@
     }
   }
 
-  // hover
-  &:not(:checked) > label:hover,
-  &:not(:checked) > label:hover ~ label {
-    color: #ff9e0b;
-  }
-
-  // checked
-  > input:checked ~ label {
+  input:checked ~ label,
+  label:hover,
+  label:hover ~ label {
     color: #ffa723;
   }
+}
 
-  // hover when already checked
-  > input:checked + label:hover,
-  > input:checked + label:hover ~ label,
-  > input:checked ~ label:hover,
-  > input:checked ~ label:hover ~ label,
-  > label:hover ~ input:checked ~ label {
-    color: #e58e09;
+.buttons {
+  display: flex;
+  gap: 8px;
+
+  button {
+    padding: 4px 12px;
+    cursor: pointer;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    background: #fff;
+    transition: background 0.2s;
+
+    &:hover {
+      background: #eee;
+    }
   }
 }

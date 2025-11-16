@@ -20,7 +20,6 @@ class Client {
 
       this.client.once('connect', () => {
         clearTimeout(timer);
-        console.log('✅ Connected to server');
         this._setupListeners();
         resolve(true);
       });
@@ -35,16 +34,26 @@ class Client {
   _setupListeners() {
     this.client.on('data', (data) => {
       this.buffer += data.toString('utf-8');
-      const marker = '<END>';
-      let index;
 
-      while ((index = this.buffer.indexOf(marker)) !== -1) {
-        const fullMessage = this.buffer.slice(0, index);
-        this.buffer = this.buffer.slice(index + marker.length);
+      let nl;
+      while ((nl = this.buffer.indexOf('\n')) !== -1) {
+        // вырезаем строку
+        const raw = this.buffer.slice(0, nl).trim();
+        this.buffer = this.buffer.slice(nl + 1);
+
+        if (!raw) continue;
+
+        let parsed;
+        try {
+          parsed = JSON.parse(raw);
+        } catch (e) {
+          console.error('Bad JSON from server:', raw);
+          continue;
+        }
 
         if (this.messageQueue.length > 0) {
           const callback = this.messageQueue.shift();
-          callback(fullMessage);
+          callback(parsed);
         }
       }
     });
@@ -58,11 +67,14 @@ class Client {
     });
   }
 
-  send(message) {
+  // отправка JSON
+  sendJson(obj) {
     if (!this.client) throw new Error('Client not connected');
-    this.client.write(Buffer.from(message, 'utf-8'));
+    const str = JSON.stringify(obj);
+    this.client.write(str + '\n'); // newline — конец сообщения
   }
 
+  // ждём ОДИН ответ
   onceMessage(callback) {
     this.messageQueue.push(callback);
   }

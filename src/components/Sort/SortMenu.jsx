@@ -1,8 +1,16 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './SortMenu.module.scss';
+import SelectBox from '../SelectBox/SelectBox';
+import Button from '../Button/Button';
 
 const SortMenu = () => {
+  const { t } = useTranslation();
   const [isOpen, setOpen] = React.useState(false);
+
+  const [category, setCategory] = React.useState('');
+  const [sortBy, setSortBy] = React.useState('');
+
   return (
     <div>
       <button
@@ -19,28 +27,56 @@ const SortMenu = () => {
       </button>
 
       <div className={`${styles.sort} ${isOpen ? styles.show : ''}`}>
-        <h3>Sort settings</h3>
+        <h3>{t('search-settings')}</h3>
 
         <label htmlFor="tags">
           <input type="checkbox" name="search" id="tags" />
-          Search by tags
+          {t('search-by-tags')}
         </label>
 
-        <label for="category">Category of definitions:</label>
-        <select id="category" name="category">
-          <option value="Value">Value</option>
-          <option value="Value">Value</option>
-          <option value="Value">Value</option>
-        </select>
+        <SelectBox
+          label={t('category-of-definition')}
+          value={category}
+          onChange={(e) => setCategory(e.target.value)}
+          options={[
+            { value: '', label: 'Select category' },
+            { value: 'frontend', label: 'Frontend' },
+            { value: 'backend', label: 'Backend' },
+            { value: 'database', label: 'Database' },
+          ]}
+        />
 
-        <label for="category">Sort by:</label>
-        <select id="category" name="category">
-          <option value="Value">Value</option>
-          <option value="Value">Value</option>
-          <option value="Value">Value</option>
-        </select>
+        <SelectBox
+          label={t('sort-by')}
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          options={[
+            { value: '', label: 'Select parameter' },
+            { value: 'popularity', label: 'Popularity' },
+            { value: 'difficulty', label: 'Difficulty' },
+            { value: 'date', label: 'Last edited' },
+          ]}
+        />
 
-        <button>Clear</button>
+        <SelectBox
+          label="отображение"
+          value={sortBy}
+          onChange={(e) => setSortBy(e.target.value)}
+          options={[
+            { value: '', label: 'Select parameter' },
+            { value: 'string', label: 'В строку' },
+            { value: 'grid', label: 'По сетке' },
+          ]}
+        />
+
+        <Button
+          onClick={() => {
+            setCategory('');
+            setSortBy('');
+          }}
+        >
+          {t('clear')}
+        </Button>
       </div>
     </div>
   );

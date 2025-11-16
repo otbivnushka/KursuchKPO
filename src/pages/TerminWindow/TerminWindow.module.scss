@@ -27,6 +27,11 @@
   h1 {
     font-size: 2rem;
     color: #232323;
+    margin: 0;
+  }
+  div {
+    display: flex;
+    gap: 10px;
   }
 }
 
@@ -59,7 +64,7 @@
   margin-bottom: 16px;
 
   img {
-    width: 120px;
+    width: auto;
     height: 120px;
     object-fit: cover;
     border-radius: 8px;
@@ -76,7 +81,7 @@
 .info {
   margin-bottom: 16px;
 
-  p {
+  div {
     margin: 4px 0;
     font-size: 0.95rem;
     opacity: 0.9;

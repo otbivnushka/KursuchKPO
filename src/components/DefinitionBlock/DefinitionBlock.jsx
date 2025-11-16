@@ -1,7 +1,11 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 import styles from './DefinitionBlock.module.scss';
+import Button from '../Button/Button';
 
 const DefinitionBlock = ({
+  id,
   definition,
   category,
   popularity,
@@ -9,6 +13,8 @@ const DefinitionBlock = ({
   lastEdition,
   image_url,
 }) => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
   return (
     <div className={styles.item}>
       <div className={styles.item__back}>
@@ -18,12 +24,20 @@ const DefinitionBlock = ({
         <div className={styles.item__info}>
           <h1 className={styles.item__header}>{definition}</h1>
           <div className={styles.item__text}>
-            <h4>Category: {category}</h4>
-            <h4>Popularity: {popularity}</h4>
-            <h4>Dificulty: {dificulty}</h4>
-            <h4>Last edition: {lastEdition}</h4>
+            <h4>
+              {t('category')}: {category}
+            </h4>
+            <h4>
+              {t('popularity')}: {popularity}
+            </h4>
+            <h4>
+              {t('dificulty')}: {dificulty}
+            </h4>
+            <h4>
+              {t('date')}: {lastEdition}
+            </h4>
           </div>
-          <button className={styles.item__button}>Подробнее</button>
+          <Button onClick={() => navigate(`/definition/${id}`)}>{t('read')}</Button>
         </div>
       </div>
     </div>
@@ -31,18 +45,3 @@ const DefinitionBlock = ({
 };
 
 export default DefinitionBlock;
-
-// <div className={styles.definition}>
-//   <div>
-//     <h2>Definition</h2>
-//     <h4>Category: Network</h4>
-//     <h4>Popularity: High</h4>
-//     <h4>Dificulty: Easy</h4>
-//     <h4>Last edition: 2022</h4>
-//   </div>
-//   <div className={styles.definition__hover}>
-//     Lorem ipsum, dolor sit amet consectetur adipisicing elit. Labore earum velit inventore illum
-//     temporibus voluptas quia. Quasi ex expedita nulla tempora deserunt earum doloremque,
-//     laboriosam provident maiores ducimus dolorum harum!
-//   </div>
-// </div>

@@ -1,9 +1,11 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './MessagesContainer.module.scss';
 
 const MessagesContainer = () => {
+  const { t } = useTranslation();
   const [active, setActive] = React.useState(0);
-  const tabs = ['My notes', 'My messages'];
+  const tabs = [t('my-notes'), t('my-messages')];
   const notes = [
     { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
     { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
