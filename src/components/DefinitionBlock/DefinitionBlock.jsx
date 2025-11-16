@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import styles from './DefinitionBlock.module.scss';
 import Button from '../Button/Button';
+import { formatDateTime, averageToString } from '../../utils/format';
 
 const DefinitionBlock = ({
   id,
@@ -11,6 +12,7 @@ const DefinitionBlock = ({
   popularity,
   dificulty,
   lastEdition,
+  rating,
   image_url,
 }) => {
   const { t } = useTranslation();
@@ -34,8 +36,9 @@ const DefinitionBlock = ({
               {t('dificulty')}: {dificulty}
             </h4>
             <h4>
-              {t('date')}: {lastEdition}
+              {t('date')}: {formatDateTime(lastEdition).split(' ')[0]}
             </h4>
+            <h4>Оценка: {averageToString(rating)}</h4>
           </div>
           <Button onClick={() => navigate(`/definition/${id}`)}>{t('read')}</Button>
         </div>

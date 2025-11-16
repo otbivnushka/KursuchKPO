@@ -1,7 +1,7 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
-import { setTheme, setLang } from '../../redux/slices/settingsSlice';
+import { setTheme, setLang, saveSettings } from '../../redux/slices/settingsSlice';
 import styles from './SettingsMenu.module.scss';
 import SelectBox from '../SelectBox/SelectBox';
 import settingsIconLight from '../../assets/ui/settings_light.svg';
@@ -11,7 +11,18 @@ const SettingsMenu = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { theme, lang } = useSelector((state) => state.settings);
+
   const [isOpen, setOpen] = React.useState(false);
+
+  const handleThemeChange = (value) => {
+    dispatch(setTheme(value));
+    dispatch(saveSettings({ theme: value, lang }));
+  };
+
+  const handleLangChange = (value) => {
+    dispatch(setLang(value));
+    dispatch(saveSettings({ theme, lang: value }));
+  };
 
   return (
     <div className={styles.container}>
@@ -33,7 +44,7 @@ const SettingsMenu = () => {
         <SelectBox
           label={t('theme')}
           value={theme}
-          onChange={(e) => dispatch(setTheme(e.target.value))}
+          onChange={(e) => handleThemeChange(e.target.value)}
           options={[
             { value: 'light', label: t('light') },
             { value: 'dark', label: t('dark') },
@@ -43,12 +54,11 @@ const SettingsMenu = () => {
         <SelectBox
           label={t('language')}
           value={lang}
-          onChange={(e) => dispatch(setLang(e.target.value))}
+          onChange={(e) => handleLangChange(e.target.value)}
           options={[
             { value: 'en', label: t('en') },
             { value: 'ru', label: t('ru') },
             { value: 'de', label: t('de') },
-            { value: 'be', label: t('be') },
           ]}
         />
       </div>

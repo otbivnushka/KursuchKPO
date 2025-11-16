@@ -1,36 +1,31 @@
 import React from 'react';
 import { useTranslation } from 'react-i18next';
 import styles from './MessagesContainer.module.scss';
+import NoteBlock from '../NoteBlock/NoteBlock';
 
 const MessagesContainer = () => {
   const { t } = useTranslation();
   const [active, setActive] = React.useState(0);
   const tabs = [t('my-notes'), t('my-messages')];
   const notes = [
-    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
-    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
-    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
-    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
-    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
-    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
-    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
-    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
-    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
-    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
-    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
-    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
-    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
-    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
-    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
-    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
-    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
-    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
-    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
-    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
-    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
-    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
-    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
-    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
+    {
+      id: 1,
+      date: '10-01-2025 22:32',
+      definition: 'Broadcast',
+      note: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat eos maxime reprehenderit similique libero, beatae inventore molestiae sapiente sit nisi commodi autem rem aliquid vel ad consequatur eveniet harum. Quia!',
+    },
+    {
+      id: 2,
+      date: '10-01-2025 22:32',
+      definition: 'Broadcast',
+      note: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat eos maxime reprehenderit similique libero, beatae inventore molestiae sapiente sit nisi commodi autem rem aliquid vel ad consequatur eveniet harum. Quia!',
+    },
+    {
+      id: 3,
+      date: '10-01-2025 22:32',
+      definition: 'Broadcast',
+      note: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat eos maxime reprehenderit similique libero, beatae inventore molestiae sapiente sit nisi commodi autem rem aliquid vel ad consequatur eveniet harum. Quia!',
+    },
     { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
     { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
     { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
@@ -52,20 +47,9 @@ const MessagesContainer = () => {
         ))}
       </div>
       <div className={styles.message__body}>
-        <div className={styles.table__row__header}>
-          <div className={styles.table__column_1}>Date</div>
-          <div className={styles.table__column_2}>Definition</div>
-          <div className={styles.table__column_3}>Note</div>
-        </div>
-        <div className={styles.table}>
-          {notes.map((note, index) => (
-            <div className={`${styles.table__row}`} key={index}>
-              <div className={styles.table__column_1}>{note.date}</div>
-              <div className={styles.table__column_2}>{note.definition}</div>
-              <div className={styles.table__column_3}>{note.note}</div>
-            </div>
-          ))}
-        </div>
+        {notes.map((note) => (
+          <NoteBlock key={note.id + note.date} note={note} />
+        ))}
       </div>
     </div>
   );

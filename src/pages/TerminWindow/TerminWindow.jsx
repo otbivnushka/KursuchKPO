@@ -4,7 +4,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import RatingBar from '../../components/RatingBar/RatingBar';
 import ActionsMenu from '../../components/ActionsMenu/ActionsMenu';
-
 import styles from './TerminWindow.module.scss';
 import Button from '../../components/Button/Button';
 
@@ -12,9 +11,31 @@ const TerminWindow = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { id } = useParams();
-  const definitionInfo = useSelector((state) => state.definition.items).find(
+  const definitionInfo = useSelector((state) => state.definition?.items).find(
     (item) => item.id === id
   );
+
+  const userRate = useSelector((state) => state.user.user.ratedTerms).find(
+    (item) => item.term === id
+  );
+  const language = useSelector((state) => state.settings.lang);
+
+  useEffect(() => {
+    window.api.sendAndWaitResponse({ Command: 'TERM_VISITED', Payload: { term: id } });
+  }, [id]);
+
+  const handleRate = async (value) => {
+    await window.api.sendAndWaitResponse({
+      Command: 'RATE_TERM',
+      Payload: { term: definitionInfo.id, rating: value },
+    });
+  };
+  const handleCancelRate = async () => {
+    await window.api.sendAndWaitResponse({
+      Command: 'RATE_TERM',
+      Payload: { term: definitionInfo.id, rating: 0 },
+    });
+  };
 
   return (
     <div className={styles.terminWindow}>
@@ -33,7 +54,7 @@ const TerminWindow = () => {
       <h3>{t('definition')}</h3>
       <div className={styles.definition}>
         <img src={definitionInfo.media[0]?.url} alt="term illustration" />
-        <p>{definitionInfo.definition}</p>
+        <p>{definitionInfo.translations[language]}</p>
       </div>
 
       <div className={styles.info}>
@@ -48,9 +69,9 @@ const TerminWindow = () => {
       <div className={styles.rating}>
         <h3>{t('rate-this')}</h3>
         <RatingBar
-          rating={null}
-          onSubmit={(value) => console.log('Submitted rating:', value)}
-          onCancel={() => console.log('Rating canceled')}
+          rating={userRate === undefined ? null : userRate.rating}
+          onSubmit={(value) => handleRate(value)}
+          onCancel={() => handleCancelRate()}
         />
         <h5>
           {t('total-rate')}

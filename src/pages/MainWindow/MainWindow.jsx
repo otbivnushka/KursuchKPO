@@ -3,6 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchDefinitions } from '../../redux/slices/definitionSlice';
+import { fetchUserData } from '../../redux/slices/userSlice';
 import styles from './MainWindow.module.scss';
 import SearchBar from '../../components/SearchBar/SearchBar';
 import DefinitionBlock from '../../components/DefinitionBlock/DefinitionBlock';
@@ -17,10 +18,19 @@ const MainWindow = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { items: definitions, status } = useSelector((state) => state.definition);
+  const { categorySelect, sortBy, viewAs } = useSelector((state) => state.settings);
 
   useEffect(() => {
-    dispatch(fetchDefinitions());
-    console.log(definitions);
+    const fetchData = async () => {
+      try {
+        await dispatch(fetchDefinitions());
+        await dispatch(fetchUserData());
+      } catch (err) {
+        console.error('Ошибка при загрузке данных:', err);
+      }
+    };
+
+    fetchData();
   }, [dispatch]);
 
   if (status === 'loading') return <LoadingPageScreen>{t('loading')}</LoadingPageScreen>;
@@ -54,18 +64,21 @@ const MainWindow = () => {
           </div>
 
           <div className={styles.definitions}>
-            {definitions.map((definition, index) => (
-              <DefinitionBlock
-                key={index}
-                id={definition.id}
-                definition={definition.term}
-                category={definition.category}
-                popularity={definition.popularity}
-                dificulty={definition.difficultyLevel}
-                lastEdition={definition.history?.[0]?.date}
-                image_url={definition.media?.[0]?.url}
-              />
-            ))}
+            {definitions
+              //.filter((obj) => obj.category === categorySelect)
+              .map((definition, index) => (
+                <DefinitionBlock
+                  key={index}
+                  id={definition.id}
+                  definition={definition.term}
+                  category={definition.category}
+                  popularity={definition.popularity}
+                  dificulty={definition.difficultyLevel}
+                  lastEdition={definition.addedDate}
+                  rating={definition.difficultyRatings}
+                  image_url={definition.media?.[0]?.url}
+                />
+              ))}
           </div>
         </div>
       </div>

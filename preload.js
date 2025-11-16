@@ -1,4 +1,4 @@
-const { contextBridge, ipcRenderer, clipboard } = require('electron');
+const { contextBridge, ipcRenderer } = require('electron');
 
 contextBridge.exposeInMainWorld('api', {
   closeApp: () => ipcRenderer.invoke('close-app'),
@@ -10,4 +10,6 @@ contextBridge.exposeInMainWorld('api', {
   //convert_blob: (filepath) => ipcRenderer.invoke('convert-to-blob', filepath),
   openBrowserWindow: (url) => ipcRenderer.invoke('open-browser-window', url),
   sendAndWaitResponse: (msgObj) => ipcRenderer.invoke('send-message-get-response', msgObj),
+  getSettings: () => ipcRenderer.invoke('settings:get'),
+  saveSettings: (data) => ipcRenderer.invoke('settings:set', data),
 });

@@ -11,6 +11,7 @@ import pinedIcon from '../../assets/ui/pined.svg';
 import sourceIcon from '../../assets/ui/source.svg';
 import printIcon from '../../assets/ui/print.svg';
 import editIcon from '../../assets/ui/edit.svg';
+import AddNote from '../AddNote/AddNote';
 
 const ActionsMenu = ({ id }) => {
   const dispatch = useDispatch();
@@ -18,6 +19,7 @@ const ActionsMenu = ({ id }) => {
   const [open, setOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [pined, setPined] = useState({});
+  const [addNoteOpened, setAddNoteOpened] = useState(false);
 
   const definitionInfo = useSelector((state) =>
     state.definition.items.find((item) => item.id === id)
@@ -52,52 +54,66 @@ const ActionsMenu = ({ id }) => {
   };
 
   const handlePin = async () => {
-    setPined(!pined);
+    setAddNoteOpened(true);
+  };
+
+  const handlePrint = () => {
+    window.print();
   };
 
   return (
-    <div className={styles.actions}>
-      <button
-        className={`${styles.burger} ${open ? styles.open : ''}`}
-        onClick={() => setOpen(!open)}
-        aria-label="Toggle actions menu"
-      >
-        <span></span>
-        <span></span>
-        <span></span>
-      </button>
-
-      <div className={`${styles.links} ${open ? styles.show : ''}`}>
-        <button onClick={() => handleLike()}>
-          <img src={liked ? likedIcon : likeIcon} alt="" />
-          <span>{t('like')}</span>
-        </button>
+    <>
+      {addNoteOpened && (
+        <AddNote
+          pined={pined}
+          setPined={setPined}
+          setAddNoteOpened={setAddNoteOpened}
+          id={id}
+        ></AddNote>
+      )}
+      <div className={styles.actions}>
         <button
-          onClick={() =>
-            navigator.clipboard.writeText(definitionInfo.term + ' - ' + definitionInfo.definition)
-          }
+          className={`${styles.burger} ${open ? styles.open : ''}`}
+          onClick={() => setOpen(!open)}
+          aria-label="Toggle actions menu"
         >
-          <img src={copyIcon} alt="" />
-          <span>{t('copy')}</span>
+          <span></span>
+          <span></span>
+          <span></span>
         </button>
-        <button onClick={() => handlePin()}>
-          <img src={pined ? pinedIcon : pinIcon} alt="" />
-          <span>{t('pin')}</span>
-        </button>
-        <button onClick={() => window.api.openBrowserWindow(definitionInfo.source)}>
-          <img src={sourceIcon} alt="" />
-          <span>{t('source')}</span>
-        </button>
-        <button onClick={() => alert('print')}>
-          <img src={printIcon} alt="" />
-          <span>{t('print')}</span>
-        </button>
-        <button onClick={() => alert('')}>
-          <img src={editIcon} alt="" />
-          <span>{t('edit')}</span>
-        </button>
+
+        <div className={`${styles.links} ${open ? styles.show : ''}`}>
+          <button onClick={() => handleLike()}>
+            <img src={liked ? likedIcon : likeIcon} alt="" />
+            <span>{t('like')}</span>
+          </button>
+          <button
+            onClick={() =>
+              navigator.clipboard.writeText(definitionInfo.term + ' - ' + definitionInfo.definition)
+            }
+          >
+            <img src={copyIcon} alt="" />
+            <span>{t('copy')}</span>
+          </button>
+          <button onClick={() => handlePin()}>
+            <img src={pined ? pinedIcon : pinIcon} alt="" />
+            <span>{t('pin')}</span>
+          </button>
+          <button onClick={() => window.api.openBrowserWindow(definitionInfo.source)}>
+            <img src={sourceIcon} alt="" />
+            <span>{t('source')}</span>
+          </button>
+          <button onClick={() => handlePrint()}>
+            <img src={printIcon} alt="" />
+            <span>{t('print')}</span>
+          </button>
+          <button onClick={() => alert('')}>
+            <img src={editIcon} alt="" />
+            <span>{t('edit')}</span>
+          </button>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 

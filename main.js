@@ -1,8 +1,10 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
+const fs = require('fs');
 const { Client } = require('./client');
 
 let client;
+let settingsPath;
 
 function createWindow() {
   console.log(12345);
@@ -33,6 +35,22 @@ function createBrowserWindow(url) {
 }
 
 app.whenReady().then(() => {
+  settingsPath = path.join(app.getPath('userData'), 'settings.json');
+
+  if (!fs.existsSync(settingsPath)) {
+    fs.writeFileSync(
+      settingsPath,
+      JSON.stringify(
+        {
+          theme: 'light',
+          lang: 'en',
+        },
+        null,
+        2
+      )
+    );
+  }
+
   createWindow();
   ipcMain.handle('open-browser-window', (event, url) => {
     createBrowserWindow(url);
@@ -70,4 +88,15 @@ ipcMain.handle('send-message-get-response', async (event, messageObj) => {
 
     client.sendJson(messageObj);
   });
+});
+
+ipcMain.handle('settings:get', async () => {
+  const data = fs.readFileSync(settingsPath, 'utf8');
+  return JSON.parse(data);
+});
+
+// Запись
+ipcMain.handle('settings:set', async (event, newSettings) => {
+  fs.writeFileSync(settingsPath, JSON.stringify(newSettings, null, 2));
+  return true;
 });

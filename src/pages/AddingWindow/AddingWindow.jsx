@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from './AddingWindow.module.scss';
 import TextBox from '../../components/TextBox/TextBox';
 import TextArea from '../../components/TextArea/TextArea';
@@ -9,20 +10,36 @@ import Button from '../../components/Button/Button';
 import createTermPayload from '../../utils/jsonTermin';
 
 const AddingWindow = () => {
+  const navigate = useNavigate();
   const [lang, setLang] = useState('en');
 
   const [term, setTerm] = useState('');
   const [definitions, setDefinitions] = useState({ en: '', ru: '', de: '' });
-  const [category, setCategory] = useState('');
+  const [categorySelect, setCategorySelect] = useState('');
+  const [categoryTextbox, setCategoryTextbox] = useState('');
   const [difficulty, setDifficulty] = useState(1);
   const [source, setSource] = useState('');
   const [image, setImage] = useState('');
 
-  const categories = [
-    { value: '1', label: 'Category 1' },
-    { value: '2', label: 'Category 2' },
-    { value: '3', label: 'Category 3' },
-  ];
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const load = async () => {
+      const response = await window.api.sendAndWaitResponse({
+        Command: 'GET_CATEGORIES',
+        Payload: {},
+      });
+
+      setCategories(
+        response.payload.map((category, idx) => ({
+          value: String(idx + 1), // если хочешь 1,2,3,4...
+          label: category, // если с сервера приходит строка
+        }))
+      );
+    };
+
+    load();
+  }, []);
 
   // Обработчик изменения текста в TextArea
   const handleDefinitionChange = (text) => {
@@ -34,6 +51,8 @@ const AddingWindow = () => {
 
   const handleAdd = async () => {
     try {
+      const labels = ['Easy', 'Normal', 'Medium', 'Hard', 'Extreme'];
+      const category = categoryTextbox || categories[categorySelect - 1].label;
       const payload = createTermPayload(
         {
           term,
@@ -46,7 +65,7 @@ const AddingWindow = () => {
           },
           source,
           media: image ? [{ url: image }] : [],
-          difficultyLevel: difficulty,
+          difficultyLevel: labels[difficulty - 1],
         },
         'currentUser'
       );
@@ -56,7 +75,7 @@ const AddingWindow = () => {
         Payload: payload,
       });
       console.log(response);
-      alert('Payload готов к отправке в консоли');
+      if (response.success) navigate('/main');
     } catch (err) {
       alert(err.message);
     }
@@ -66,33 +85,45 @@ const AddingWindow = () => {
     <div className={styles.wrapper}>
       <div className={styles.add}>
         <h1>Add definition</h1>
-        <div>
-          <TextBox label="Term" value={term} onChange={(e) => setTerm(e.target.value)} />
-
-          <LanguageSelector value={lang} onChange={(newLang) => setLang(newLang)} />
-          <p>Language: {lang}</p>
-
-          <TextArea
-            label="Meaning"
-            value={definitions[lang]}
-            onChange={(e) => handleDefinitionChange(e.target.value)}
-          />
-
-          <SelectBox
-            label="Category"
-            options={categories}
-            value={category}
-            onChange={setCategory}
-          />
-          <SliderDifficulty value={difficulty} onChange={setDifficulty} />
-          <p>Difficulty: {difficulty}</p>
-          <TextBox label="Image" value={image} onChange={(e) => setImage(e.target.value)} />
-          <TextBox label="Source" value={source} onChange={(e) => setSource(e.target.value)} />
-
-          <Button variant="primary" onClick={handleAdd}>
-            Add
-          </Button>
+        <div className={styles.mainInfo}>
+          <div>
+            <TextBox label="Term name" value={term} onChange={(e) => setTerm(e.target.value)} />
+            <TextArea
+              label="Meaning"
+              value={definitions[lang]}
+              onChange={(e) => handleDefinitionChange(e.target.value)}
+            />
+            <div className={styles.languageSelector}>
+              <LanguageSelector value={lang} onChange={(newLang) => setLang(newLang)} />
+            </div>
+          </div>
         </div>
+        <div className={styles.category}>
+          <SelectBox
+            label="Choose category"
+            options={categories}
+            value={categorySelect}
+            onChange={(e) => setCategorySelect(e.target.value)}
+          />
+          <h3>OR</h3>
+          <TextBox
+            label="Type new category"
+            value={categoryTextbox}
+            onChange={(e) => setCategoryTextbox(e.target.value)}
+          />
+        </div>
+        <div className={styles.difficulty}>
+          <SliderDifficulty value={difficulty} onChange={setDifficulty} />
+        </div>
+        <TextBox label="Image" value={image} onChange={(e) => setImage(e.target.value)} />
+        <TextBox label="Source" value={source} onChange={(e) => setSource(e.target.value)} />
+
+        <Button variant="primary" onClick={handleAdd}>
+          Add
+        </Button>
+        <Button variant="secondary" onClick={() => navigate('/main')}>
+          Cancel
+        </Button>
       </div>
     </div>
   );
