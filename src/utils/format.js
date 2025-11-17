@@ -23,4 +23,12 @@ function averageToString(arr) {
   return avg.toFixed(1); // 1 знак после запятой
 }
 
-export { formatDateTime, averageToString };
+function parseLine(str) {
+  const match = str.match(/^\((.+?)\):\s*(.+)$/);
+  if (!match) return [];
+
+  const [, first, second] = match;
+  return [first.trim(), second.trim()];
+}
+
+export { formatDateTime, averageToString, parseLine };

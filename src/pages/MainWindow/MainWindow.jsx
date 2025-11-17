@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -19,6 +19,7 @@ const MainWindow = () => {
   const navigate = useNavigate();
   const { items: definitions, status } = useSelector((state) => state.definition);
   const { categorySelect, sortBy, viewAs } = useSelector((state) => state.settings);
+  const [deletion, setDeletion] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -32,6 +33,10 @@ const MainWindow = () => {
 
     fetchData();
   }, [dispatch]);
+
+  const handleDelete = () => {
+    setDeletion(!deletion);
+  };
 
   if (status === 'loading') return <LoadingPageScreen>{t('loading')}</LoadingPageScreen>;
   if (status === 'error') return <div>Ошибка при загрузке данных</div>;
@@ -55,8 +60,8 @@ const MainWindow = () => {
             <button className={styles.aside_link} onClick={() => navigate('/add')}>
               Add definition
             </button>
-            <button className={styles.aside_link} href="https://example.com/">
-              Some option
+            <button className={styles.aside_link} onClick={() => handleDelete()}>
+              {deletion ? 'Cancel deletion' : 'Delete definition'}
             </button>
             <button className={styles.aside_link} href="https://example.com/">
               Some option
@@ -77,6 +82,8 @@ const MainWindow = () => {
                   lastEdition={definition.addedDate}
                   rating={definition.difficultyRatings}
                   image_url={definition.media?.[0]?.url}
+                  deletion={deletion}
+                  setDeletion={setDeletion}
                 />
               ))}
           </div>

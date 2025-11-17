@@ -12,6 +12,7 @@ import TerminWindow from './pages/TerminWindow/TerminWindow';
 import PersonalAccountWindow from './pages/PersonalAccountWindow/PersonalAccountWindow';
 import AddingWindow from './pages/AddingWindow/AddingWindow';
 import { loadSettings } from './redux/slices/settingsSlice';
+import EditWindow from './pages/EditWindow/EditWindow';
 
 const App = () => {
   const dispatch = useDispatch();
@@ -32,6 +33,7 @@ const App = () => {
             <Route path="/definition/:id" element={<TerminWindow />} />
             <Route path="/account" element={<PersonalAccountWindow />} />
             <Route path="/add" element={<AddingWindow />} />
+            <Route path="/edit/:id" element={<EditWindow />} />
           </Routes>
         </BrowserRouter>
       </I18nextProvider>

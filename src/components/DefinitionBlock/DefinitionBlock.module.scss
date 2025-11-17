@@ -1,3 +1,6 @@
+.block {
+  position: relative;
+}
 .item {
   position: relative;
   width: 100%;
@@ -8,6 +11,25 @@
   background-color: var(--bg-color);
   box-shadow: 4px 4px 8px 0px rgba(34, 60, 80, 0.2);
   transition: all 0.7s ease-in-out;
+
+  &__deletion {
+    position: absolute;
+    z-index: 2000;
+    width: 40px;
+    height: 40px;
+    right: 0px;
+    top: 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    border-bottom-left-radius: 16px;
+    border: none;
+    cursor: pointer;
+    background: rgb(218, 67, 67);
+
+    img {
+    }
+  }
 
   &__back {
     position: absolute;

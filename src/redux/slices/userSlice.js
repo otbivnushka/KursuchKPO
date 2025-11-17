@@ -66,7 +66,7 @@ const userSlice = createSlice({
     },
 
     updateMessages(state, action) {
-      if (state.user) state.user.Messages = action.payload;
+      if (state.user) state.user.messages = action.payload;
     },
 
     updateRatedTerms(state, action) {

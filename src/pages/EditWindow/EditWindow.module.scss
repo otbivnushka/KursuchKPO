@@ -1,0 +1,34 @@
+.wrapper {
+  max-width: 1440px;
+  margin: 0 auto;
+  padding: 10px 20px;
+}
+
+.category {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 10px;
+  justify-content: center;
+  align-items: center;
+  div {
+    width: 200px;
+  }
+}
+
+.languageSelector {
+  display: flex;
+  justify-content: center;
+}
+
+.mainInfo {
+  padding: 10px;
+  //border: var(--border-color) solid 1px;
+  background-color: var(--bg-block-color);
+  border-radius: 16px;
+  margin: 10px 0;
+}
+
+.difficulty {
+  display: flex;
+  justify-content: center;
+}

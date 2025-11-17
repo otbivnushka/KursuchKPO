@@ -5,8 +5,8 @@
   }
 
   &__body {
-    max-height: 400px; // фиксированная высота контейнера
-    overflow-y: auto; // вертикальная прокрутка
+    height: calc(100% - 52px);
+    overflow-y: auto;
     padding: 16px;
     background-color: var(--bg-aside-color);
     border-bottom-left-radius: 16px;

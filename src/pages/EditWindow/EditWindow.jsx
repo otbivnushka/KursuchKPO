@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
-import styles from './AddingWindow.module.scss';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import styles from './EditWindow.module.scss';
 import TextBox from '../../components/TextBox/TextBox';
 import TextArea from '../../components/TextArea/TextArea';
 import SelectBox from '../../components/SelectBox/SelectBox';
@@ -9,8 +10,16 @@ import LanguageSelector from '../../components/LanguageSelector/LanguageSelector
 import Button from '../../components/Button/Button';
 import createTermPayload from '../../utils/jsonTermin';
 
-const AddingWindow = () => {
+const EditWindow = () => {
   const navigate = useNavigate();
+  const { id } = useParams();
+
+  const labels = ['Easy', 'Normal', 'Medium', 'Hard', 'Extreme'];
+
+  const definitionObj = useSelector((state) =>
+    state.definition.items.find((item) => item.id === id)
+  );
+
   const [lang, setLang] = useState('en');
 
   const [term, setTerm] = useState('');
@@ -23,6 +32,7 @@ const AddingWindow = () => {
 
   const [categories, setCategories] = useState([]);
 
+  // грузим категории
   useEffect(() => {
     const load = async () => {
       const response = await window.api.sendAndWaitResponse({
@@ -32,72 +42,67 @@ const AddingWindow = () => {
 
       setCategories(
         response.payload.map((category, idx) => ({
-          value: String(idx + 1), // если хочешь 1,2,3,4...
-          label: category, // если с сервера приходит строка
+          value: String(idx + 1),
+          label: category,
         }))
       );
     };
-
     load();
   }, []);
 
-  // Обработчик изменения текста в TextArea
+  // заполняем поля существующими данными
+  useEffect(() => {
+    if (!definitionObj) return;
+
+    setTerm(definitionObj.term || '');
+
+    setDefinitions({
+      en: definitionObj.translations?.en || '',
+      ru: definitionObj.translations?.ru || '',
+      de: definitionObj.translations?.de || '',
+    });
+
+    setDifficulty(labels.indexOf(definitionObj.difficultyLevel) + 1);
+    setSource(definitionObj.source || '');
+    setImage(definitionObj.media?.[0]?.url || ''); // если есть
+
+    const idx = categories.findIndex((c) => c.label === definitionObj.category);
+    if (idx !== -1) {
+      setCategorySelect(String(idx + 1));
+    } else {
+      setCategoryTextbox(definitionObj.category);
+    }
+  }, [definitionObj, categories]);
+
   const handleDefinitionChange = (text) => {
     setDefinitions((prev) => ({
       ...prev,
       [lang]: text,
     }));
   };
-
-  const handleAdd = async () => {
-    try {
-      const labels = ['Easy', 'Normal', 'Medium', 'Hard', 'Extreme'];
-      const category = categoryTextbox || categories[categorySelect - 1].label;
-      const payload = createTermPayload(
-        {
-          term,
-          definition: '123', // можно выбрать основной язык или объединять все переводы
-          category,
-          translations: {
-            en: definitions.en,
-            ru: definitions.ru,
-            de: definitions.de,
-          },
-          source,
-          media: image ? [{ url: image }] : [],
-          difficultyLevel: labels[difficulty - 1],
-        },
-        'currentUser'
-      );
-      console.log(payload);
-      const response = await window.api.sendAndWaitResponse({
-        Command: 'ADD_TERM',
-        Payload: payload,
-      });
-      console.log(response);
-      if (response.success) navigate('/main');
-    } catch (err) {
-      alert(err.message);
-    }
-  };
+  const handleSave = async () => {};
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.add}>
-        <h1>Add definition</h1>
+        <h1>Edit definition</h1>
+
         <div className={styles.mainInfo}>
           <div>
             <TextBox label="Term name" value={term} onChange={(e) => setTerm(e.target.value)} />
+
             <TextArea
               label="Meaning"
-              value={definitions[lang]}
+              value={definitions[lang] || ''}
               onChange={(e) => handleDefinitionChange(e.target.value)}
             />
+
             <div className={styles.languageSelector}>
-              <LanguageSelector value={lang} onChange={(newLang) => setLang(newLang)} />
+              <LanguageSelector value={lang} onChange={setLang} />
             </div>
           </div>
         </div>
+
         <div className={styles.category}>
           <SelectBox
             label="Choose category"
@@ -112,14 +117,16 @@ const AddingWindow = () => {
             onChange={(e) => setCategoryTextbox(e.target.value)}
           />
         </div>
+
         <div className={styles.difficulty}>
           <SliderDifficulty value={difficulty} onChange={setDifficulty} />
         </div>
+
         <TextBox label="Image" value={image} onChange={(e) => setImage(e.target.value)} />
         <TextBox label="Source" value={source} onChange={(e) => setSource(e.target.value)} />
 
-        <Button variant="primary" onClick={handleAdd}>
-          Add
+        <Button variant="primary" onClick={handleSave}>
+          Save
         </Button>
         <Button variant="secondary" onClick={() => navigate('/main')}>
           Cancel
@@ -129,4 +136,4 @@ const AddingWindow = () => {
   );
 };
 
-export default AddingWindow;
+export default EditWindow;

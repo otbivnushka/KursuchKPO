@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 import { fetchUserData } from '../../redux/slices/userSlice';
 import styles from './ActionsMenu.module.scss';
 import likeIcon from '../../assets/ui/like.svg';
@@ -12,14 +13,17 @@ import sourceIcon from '../../assets/ui/source.svg';
 import printIcon from '../../assets/ui/print.svg';
 import editIcon from '../../assets/ui/edit.svg';
 import AddNote from '../AddNote/AddNote';
+import SuggestEdition from '../SuggestEdition/SuggestEdition';
 
 const ActionsMenu = ({ id }) => {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [liked, setLiked] = useState(false);
   const [pined, setPined] = useState({});
   const [addNoteOpened, setAddNoteOpened] = useState(false);
+  const [addSuggestionOpened, setAddSuggestionOpened] = useState(false);
 
   const definitionInfo = useSelector((state) =>
     state.definition.items.find((item) => item.id === id)
@@ -57,6 +61,10 @@ const ActionsMenu = ({ id }) => {
     setAddNoteOpened(true);
   };
 
+  const handleSugg = async () => {
+    setAddSuggestionOpened(true);
+  };
+
   const handlePrint = () => {
     window.print();
   };
@@ -69,7 +77,14 @@ const ActionsMenu = ({ id }) => {
           setPined={setPined}
           setAddNoteOpened={setAddNoteOpened}
           id={id}
+          name={definitionInfo.term}
         ></AddNote>
+      )}
+      {addSuggestionOpened && (
+        <SuggestEdition
+          setSuggestEditionOpened={setAddSuggestionOpened}
+          name={definitionInfo.term}
+        ></SuggestEdition>
       )}
       <div className={styles.actions}>
         <button
@@ -107,10 +122,14 @@ const ActionsMenu = ({ id }) => {
             <img src={printIcon} alt="" />
             <span>{t('print')}</span>
           </button>
-          <button onClick={() => alert('')}>
+          <button onClick={() => handleSugg()}>
             <img src={editIcon} alt="" />
             <span>{t('edit')}</span>
           </button>
+          {/* <button onClick={() => navigate(`/edit/${id}`)}>
+            <img src={editIcon} alt="" />
+            <span>{t('edit')}</span>
+          </button> */}
         </div>
       </div>
     </>

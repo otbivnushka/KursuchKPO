@@ -4,14 +4,14 @@ import TextArea from '../TextArea/TextArea';
 import Button from '../Button/Button';
 import clsx from 'clsx';
 
-const AddNote = ({ pined, setPined, setAddNoteOpened, id }) => {
+const AddNote = ({ pined, setPined, setAddNoteOpened, id, name }) => {
   const [noteText, setNoteText] = useState(pined?.notedData || '');
   const handleSave = async () => {
     const response = await window.api.sendAndWaitResponse({
       Command: 'ADD_NOTE',
       Payload: {
         term: id,
-        note: noteText,
+        note: '(' + name + '): ' + noteText,
       },
     });
     setAddNoteOpened(false);

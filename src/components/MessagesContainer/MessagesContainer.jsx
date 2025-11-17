@@ -1,35 +1,43 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import styles from './MessagesContainer.module.scss';
 import NoteBlock from '../NoteBlock/NoteBlock';
+import MessageBlock from '../MessageBlock/MessageBlock';
+import Button from '../Button/Button';
+import { parseLine, formatDateTime } from '../../utils/format';
 
-const MessagesContainer = () => {
+const MessagesContainer = ({ active, setActive }) => {
   const { t } = useTranslation();
-  const [active, setActive] = React.useState(0);
   const tabs = [t('my-notes'), t('my-messages')];
-  const notes = [
-    {
-      id: 1,
-      date: '10-01-2025 22:32',
-      definition: 'Broadcast',
-      note: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat eos maxime reprehenderit similique libero, beatae inventore molestiae sapiente sit nisi commodi autem rem aliquid vel ad consequatur eveniet harum. Quia!',
-    },
-    {
-      id: 2,
-      date: '10-01-2025 22:32',
-      definition: 'Broadcast',
-      note: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat eos maxime reprehenderit similique libero, beatae inventore molestiae sapiente sit nisi commodi autem rem aliquid vel ad consequatur eveniet harum. Quia!',
-    },
-    {
-      id: 3,
-      date: '10-01-2025 22:32',
-      definition: 'Broadcast',
-      note: 'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Quaerat eos maxime reprehenderit similique libero, beatae inventore molestiae sapiente sit nisi commodi autem rem aliquid vel ad consequatur eveniet harum. Quia!',
-    },
-    { id: 1, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 1' },
-    { id: 2, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 2' },
-    { id: 3, date: '10-01-2025 22:32', definition: 'Broadcast', note: 'Note 3' },
-  ];
+  const userNotes = useSelector((state) => state.user.user.notes);
+  const userMessages = useSelector((state) => state.user.user.messages);
+
+  const [notes, setNotes] = useState([]);
+  const [messages, setMessages] = useState([]);
+  useEffect(() => {
+    const mappedNotes = userNotes.map((u, i) => {
+      const [termName, termNote] = parseLine(u.notedData);
+      return {
+        id: i + 1,
+        date: formatDateTime(u.timestamp),
+        definition: termName,
+        note: termNote,
+        source: u.notedTerm,
+      };
+    });
+    const mappedMessages = userMessages.map((u, i) => {
+      return {
+        id: i + 1,
+        date: formatDateTime(u.timestamp),
+        author: u.author,
+        theme: u.theme,
+        content: u.content,
+      };
+    });
+    setNotes(mappedNotes);
+    setMessages(mappedMessages);
+  }, [userNotes, userMessages]);
 
   return (
     <div>
@@ -47,9 +55,9 @@ const MessagesContainer = () => {
         ))}
       </div>
       <div className={styles.message__body}>
-        {notes.map((note) => (
-          <NoteBlock key={note.id + note.date} note={note} />
-        ))}
+        {active === 0 && notes.map((note) => <NoteBlock key={note.id + note.date} note={note} />)}
+        {active === 1 &&
+          messages.map((note) => <MessageBlock key={note.id + note.date} note={note} />)}
       </div>
     </div>
   );

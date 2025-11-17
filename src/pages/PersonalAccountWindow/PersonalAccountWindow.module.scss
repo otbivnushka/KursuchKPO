@@ -1,5 +1,6 @@
 .wrapper {
   max-width: 1440px;
+  height: 100vh;
   margin: 0 auto;
   padding: 10px 20px;
 }
@@ -13,6 +14,24 @@
   margin-bottom: 20px;
   padding: 50px 20px 20px 120px;
   border-radius: 20px;
+  &__max {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    border: var(--border-color) solid 2px;
+    background-color: white;
+    overflow: hidden;
+    margin: 0 auto 20px;
+    cursor: pointer;
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  }
   &__image {
     position: absolute;
     top: -50px;
@@ -35,6 +54,7 @@
 .account {
   display: grid;
   grid-template-rows: auto 1fr auto;
+  height: 100%;
   &__footer {
     display: flex;
     justify-content: space-between;
