@@ -1,7 +1,9 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './RatingBar.module.scss';
 
 const RatingBar = ({ rating = null, onSubmit, onCancel }) => {
+  const { t } = useTranslation();
   const [selected, setSelected] = useState(rating);
 
   const handleSelect = (value) => {
@@ -22,6 +24,7 @@ const RatingBar = ({ rating = null, onSubmit, onCancel }) => {
 
   return (
     <div className={styles.wrapper}>
+      <h3>{t('rate-this')}</h3>
       <div className={styles.rating}>
         {[5, 4, 3, 2, 1].map((value) => (
           <React.Fragment key={value}>

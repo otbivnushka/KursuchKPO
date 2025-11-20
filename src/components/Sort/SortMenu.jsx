@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './SortMenu.module.scss';
@@ -10,11 +10,23 @@ const SortMenu = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const [isOpen, setOpen] = React.useState(false);
+  const [isOpen, setOpen] = useState(false);
+  const [categorySelectList, setCategorySelectList] = useState([]);
 
-  const categorySelect = useSelector((state) => state.settings.categorySelect);
-  const sortBy = useSelector((state) => state.settings.sortBy);
-  const viewAs = useSelector((state) => state.settings.viewAs);
+  const { categorySelect, sortBy, viewAs } = useSelector((state) => state.settings);
+  const { categories } = useSelector((state) => state.definition);
+
+  useEffect(() => {
+    console.log(categories);
+    dispatch(setCategorySelect([]));
+    const mapped = categories.map((u) => ({
+      label: u,
+      value: u,
+    }));
+    mapped.unshift({ label: t('select-cat'), value: '' });
+    setCategorySelectList(mapped);
+    console.log(mapped);
+  }, [categories, dispatch]);
 
   return (
     <div>
@@ -41,33 +53,27 @@ const SortMenu = () => {
             dispatch(setCategorySelect(e.target.value));
             console.log(e.target.value);
           }}
-          options={[
-            { value: '', label: 'Select category' },
-            { value: 'frontend', label: 'Frontend' },
-            { value: 'backend', label: 'Backend' },
-            { value: 'database', label: 'Database' },
-          ]}
+          options={categorySelectList}
         />
-
         <SelectBox
           label={t('sort-by')}
           value={sortBy}
           onChange={(e) => dispatch(setSortBy(e.target.value))}
           options={[
-            { value: 'name', label: 'Name' },
-            { value: 'popularity', label: 'Popularity' },
-            { value: 'difficulty', label: 'Difficulty' },
-            { value: 'date', label: 'Last edited' },
+            { value: 'name', label: t('name') },
+            { value: 'popularity', label: t('popularity') },
+            { value: 'rate', label: t('rate') },
+            { value: 'date', label: t('date') },
           ]}
         />
 
         <SelectBox
-          label="View as"
+          label={t('view-as')}
           value={viewAs}
           onChange={(e) => dispatch(setViewAs(e.target.value))}
           options={[
-            { value: 'string', label: 'String' },
-            { value: 'grid', label: 'Grid' },
+            { value: 'string', label: t('string') },
+            { value: 'grid', label: t('grid') },
           ]}
         />
 

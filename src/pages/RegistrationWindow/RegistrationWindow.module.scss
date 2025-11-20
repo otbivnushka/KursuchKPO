@@ -25,3 +25,30 @@
     justify-content: space-between;
   }
 }
+
+@media (max-width: 800px) {
+  .connection {
+    &__buttons {
+      flex-direction: column;
+      div {
+        display: flex;
+        gap: 10px;
+        justify-content: space-between;
+        margin-top: 10px;
+
+        align-items: center;
+      }
+    }
+    &__form {
+      width: calc(100% - 20px);
+    }
+  }
+}
+
+@media (max-width: 400px) {
+  .connection {
+    div {
+      flex-direction: column;
+    }
+  }
+}

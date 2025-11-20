@@ -40,7 +40,7 @@ const MessagesContainer = ({ active, setActive }) => {
   }, [userNotes, userMessages]);
 
   return (
-    <div>
+    <div className={styles.message}>
       <div className={styles.message__header}>
         {tabs.map((tab, index) => (
           <div

@@ -10,6 +10,7 @@ const STATUS = {
 const initialState = {
   user: null,
   status: STATUS.WAITING,
+  justLoggedIn: false,
 };
 
 export const authorization = createAsyncThunk(
@@ -72,6 +73,10 @@ const userSlice = createSlice({
     updateRatedTerms(state, action) {
       if (state.user) state.user.RatedTerms = action.payload;
     },
+
+    resetStatus(state) {
+      state.status = STATUS.WAITING;
+    },
   },
 
   extraReducers: (builder) => {
@@ -82,7 +87,7 @@ const userSlice = createSlice({
         state.status = STATUS.LOADING;
       })
       .addCase(authorization.fulfilled, (state, action) => {
-        state.user = action.payload;
+        state.user = { ...action.payload };
         state.status = STATUS.SUCCESS;
       })
       .addCase(authorization.rejected, (state) => {
@@ -104,7 +109,13 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUser, updateFavorites, updateNotes, updateMessages, updateRatedTerms } =
-  userSlice.actions;
+export const {
+  setUser,
+  updateFavorites,
+  updateNotes,
+  updateMessages,
+  updateRatedTerms,
+  resetStatus,
+} = userSlice.actions;
 
 export default userSlice.reducer;

@@ -7,10 +7,13 @@ let client;
 let settingsPath;
 
 function createWindow() {
-  console.log(12345);
   const win = new BrowserWindow({
     width: 1000,
     height: 800,
+    minWidth: 350, // минимальная ширина окна
+    minHeight: 480,
+    autoHideMenuBar: true,
+    title: 'Dictionary',
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       contextIsolation: true,

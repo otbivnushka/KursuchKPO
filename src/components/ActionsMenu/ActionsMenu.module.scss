@@ -69,7 +69,7 @@
   }
 
   /* мобильное скрытие */
-  @media (max-width: 768px) {
+  @media (max-width: 979px) {
     position: absolute;
     top: 120%;
     right: 0;
@@ -93,7 +93,7 @@
 }
 
 /* на десктопе бургер не показываем */
-@media (min-width: 769px) {
+@media (min-width: 979px) {
   .burger {
     display: none;
   }

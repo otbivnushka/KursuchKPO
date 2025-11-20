@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import styles from './RegistrationWindow.module.scss';
 import Button from '../../components/Button/Button';
 import TextBox from '../../components/TextBox/TextBox';
-import Alert from '../../components/Alert/Alert';
 
 const RegistrationWindow = () => {
   const { t } = useTranslation();

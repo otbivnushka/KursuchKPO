@@ -13,14 +13,14 @@ export const saveSettings = createAsyncThunk('settings/save', async (data) => {
 });
 
 const initialState = {
-  login: '',
-  password: '',
+  //login: '',
+  //password: '',
   theme: 'light',
   lang: 'en',
 
   categorySelect: '',
-  sortBy: '',
-  viewAs: '',
+  sortBy: 'name',
+  viewAs: 'grid',
 };
 
 const settingsSlice = createSlice({

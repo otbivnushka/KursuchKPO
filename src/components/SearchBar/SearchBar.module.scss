@@ -7,7 +7,7 @@
 
   .input {
     flex: 1;
-    min-width: 200px; // или 400px, как у тебя
+    min-width: 100px;
     font-size: large;
     padding: 8px 15px;
     border-radius: 19px;
@@ -36,10 +36,18 @@
   }
 
   .searchButtonIconLight {
-    background-image: url('../../assets/ui/magnifier_light.svg');
+    background-image: url('../../assets/ui/light/magnifier_light.svg');
   }
 
   .searchButtonIconDark {
-    background-image: url('../../assets/ui/magnifier_dark.svg');
+    background-image: url('../../assets/ui/dark/magnifier_dark.svg');
+  }
+}
+
+@media (max-width: 680px) {
+  .input {
+    padding: 2px;
+    width: 100px;
+    font-size: 10px;
   }
 }

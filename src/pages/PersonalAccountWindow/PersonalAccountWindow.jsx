@@ -1,14 +1,15 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './PersonalAccountWindow.module.scss';
-import userImg from '../../assets/ui/user.svg';
+import userLightImg from '../../assets/ui/light/user_light.svg';
+import userDarkImg from '../../assets/ui/dark/user_dark.svg';
 import maxImg from '../../assets/ui/max.jpg';
 import MessagesContainer from '../../components/MessagesContainer/MessagesContainer';
 import Button from '../../components/Button/Button';
 import { formatDateTime } from '../../utils/format';
-import { updateMessages } from '../../redux/slices/userSlice';
+import { updateMessages, setUser } from '../../redux/slices/userSlice';
 import SendMessage from '../../components/SendMessage/SendMessage';
 
 const PersonalAccountWindow = () => {
@@ -17,10 +18,8 @@ const PersonalAccountWindow = () => {
   const dispatch = useDispatch();
   const [active, setActive] = useState(0);
   const userInfo = useSelector((state) => state.user.user);
+  const { theme } = useSelector((state) => state.settings);
   const [sendMessageOpened, setSendMessageOpened] = useState(false);
-  useEffect(() => {
-    console.log(userInfo);
-  }, [userInfo]);
 
   const handleSendMessage = () => {
     setSendMessageOpened(true);
@@ -38,10 +37,11 @@ const PersonalAccountWindow = () => {
         <div className={styles.account}>
           <div className={styles.info}>
             <div className={styles.info__image}>
-              <img src={userImg} alt="" />
+              <img src={theme === 'dark' ? userLightImg : userDarkImg} alt="" />
             </div>
             <div className={styles.info__max} onClick={() => handleSendMessage()}>
               <img src={maxImg} alt="" />
+              <p>Max</p>
             </div>
             <div className={styles.info__text}>
               <div className={styles.info__date}>ID: {userInfo.id}</div>
@@ -71,7 +71,7 @@ const PersonalAccountWindow = () => {
               <Button
                 variant="secondary"
                 onClick={() => {
-                  navigate('/');
+                  navigate('/auth');
                 }}
               >
                 {t('logout')}

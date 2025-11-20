@@ -1,0 +1,49 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  padding: 15px;
+  width: 100px;
+  background: var(--bg-aside-color);
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+
+.link {
+  display: block;
+  border: none;
+  font-size: inherit;
+  color: inherit;
+  background-color: transparent;
+  border-radius: 5px;
+  transition: all 0.3s ease-in-out;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+
+  img {
+    width: 50px;
+  }
+
+  span {
+    font-size: 10px;
+    white-space: nowrap;
+  }
+
+  &:hover {
+    background: var(--hover-color);
+  }
+}
+
+@media (max-width: 490px) {
+  .container {
+    width: 50px;
+    padding: 10px;
+  }
+  .link {
+    img {
+      width: 30px;
+    }
+  }
+}

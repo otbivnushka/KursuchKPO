@@ -12,3 +12,29 @@
     font-weight: 900;
   }
 }
+
+@media (max-width: 720px) {
+  .logo {
+    &__icon {
+      width: 25px;
+      height: 25px;
+    }
+    &__text {
+      font-size: 1.2rem;
+    }
+  }
+}
+
+@media (max-width: 680px) {
+  .logo {
+    &__text {
+      display: none;
+    }
+  }
+}
+
+@media (max-width: 520px) {
+  .logo {
+    display: none;
+  }
+}

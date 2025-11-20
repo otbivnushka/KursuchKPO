@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -10,15 +11,17 @@ import DefinitionBlock from '../../components/DefinitionBlock/DefinitionBlock';
 import UserButton from '../../components/UserButton/UserButton';
 import SettingsMenu from '../../components/SettingsMenu/SettingsMenu';
 import Logo from '../../components/Logo/Logo';
+import Aside from '../../components/Aside/Aside';
 import LoadingPageScreen from '../../components/LoadingPageScreen/LoadingPageScreen';
-//import DefinitionString from '../../components/DefinitionString/DefinitionString';
+import DefinitionString from '../../components/DefinitionString/DefinitionString';
+import sortItems from '../../utils/sort';
 
 const MainWindow = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const navigate = useNavigate();
   const { items: definitions, status } = useSelector((state) => state.definition);
   const { categorySelect, sortBy, viewAs } = useSelector((state) => state.settings);
+  const { username } = useSelector((state) => state.user.user);
   const [deletion, setDeletion] = useState(false);
 
   useEffect(() => {
@@ -50,42 +53,50 @@ const MainWindow = () => {
           <SearchBar />
 
           <div className={styles.menues}>
-            <UserButton />
+            <UserButton>{username}</UserButton>
             <SettingsMenu />
           </div>
         </header>
 
         <div className={styles.content}>
-          <div className={styles.aside}>
-            <button className={styles.aside_link} onClick={() => navigate('/add')}>
-              Add definition
-            </button>
-            <button className={styles.aside_link} onClick={() => handleDelete()}>
-              {deletion ? 'Cancel deletion' : 'Delete definition'}
-            </button>
-            <button className={styles.aside_link} href="https://example.com/">
-              Some option
-            </button>
-          </div>
+          <Aside onDeleteToggle={handleDelete} deletion={deletion} />
 
-          <div className={styles.definitions}>
-            {definitions
-              //.filter((obj) => obj.category === categorySelect)
-              .map((definition, index) => (
-                <DefinitionBlock
-                  key={index}
-                  id={definition.id}
-                  definition={definition.term}
-                  category={definition.category}
-                  popularity={definition.popularity}
-                  dificulty={definition.difficultyLevel}
-                  lastEdition={definition.addedDate}
-                  rating={definition.difficultyRatings}
-                  image_url={definition.media?.[0]?.url}
-                  deletion={deletion}
-                  setDeletion={setDeletion}
-                />
-              ))}
+          <div className={clsx(styles.definitions, viewAs === 'grid' && styles.definitions__grid)}>
+            {sortItems(definitions, sortBy)
+              .filter((obj) => {
+                return categorySelect.length === 0 ? true : obj.category === categorySelect;
+              })
+              .map((definition, index) =>
+                viewAs === 'grid' ? (
+                  <DefinitionBlock
+                    key={index}
+                    id={definition.id}
+                    definition={definition.term}
+                    category={definition.category}
+                    popularity={definition.popularity}
+                    dificulty={definition.difficultyLevel}
+                    lastEdition={definition.addedDate}
+                    rating={definition.difficultyRatings}
+                    image_url={definition.media?.[0]?.url}
+                    deletion={deletion}
+                    setDeletion={setDeletion}
+                  />
+                ) : (
+                  <DefinitionString
+                    key={index}
+                    id={definition.id}
+                    definition={definition.term}
+                    category={definition.category}
+                    popularity={definition.popularity}
+                    dificulty={definition.difficultyLevel}
+                    lastEdition={definition.addedDate}
+                    rating={definition.difficultyRatings}
+                    image_url={definition.media?.[0]?.url}
+                    deletion={deletion}
+                    setDeletion={setDeletion}
+                  />
+                )
+              )}
           </div>
         </div>
       </div>

@@ -104,3 +104,9 @@
     transform: scale(0.97);
   }
 }
+
+@media (max-width: 370px) {
+  .sort {
+    right: -60px;
+  }
+}

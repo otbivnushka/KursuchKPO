@@ -66,17 +66,18 @@ const TerminWindow = () => {
         </div>
       </div>
 
-      <div className={styles.rating}>
-        <h3>{t('rate-this')}</h3>
-        <RatingBar
-          rating={userRate === undefined ? null : userRate.rating}
-          onSubmit={(value) => handleRate(value)}
-          onCancel={() => handleCancelRate()}
-        />
-        <h5>
-          {t('total-rate')}
-          {definitionInfo.difficultyRatings.length}
-        </h5>
+      <div className={styles.ratingWrapper}>
+        <div className={styles.rating}>
+          <RatingBar
+            rating={userRate === undefined ? null : userRate.rating}
+            onSubmit={(value) => handleRate(value)}
+            onCancel={() => handleCancelRate()}
+          />
+          <h5>
+            {t('total-rate')}
+            {definitionInfo.difficultyRatings.length}
+          </h5>
+        </div>
       </div>
 
       <div className={styles.corrections}>

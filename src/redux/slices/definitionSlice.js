@@ -8,6 +8,7 @@ const STATUS = {
 
 const initialState = {
   items: [],
+  categories: [],
   status: STATUS.LOADING,
 };
 
@@ -15,13 +16,18 @@ export const fetchDefinitions = createAsyncThunk(
   'definitions/fetchDefinitions',
   async (_, { rejectWithValue }) => {
     try {
-      const message = {
+      const message_terms = {
         Command: 'GET_TERMS',
         Payload: {},
       };
-      const response = await window.api.sendAndWaitResponse(message);
-      console.log(response);
-      return response.payload;
+      const message_categories = {
+        Command: 'GET_CATEGORIES',
+        Payload: {},
+      };
+      const response_terms = await window.api.sendAndWaitResponse(message_terms);
+      const response_categories = await window.api.sendAndWaitResponse(message_categories);
+
+      return { terms: response_terms.payload, categories: response_categories.payload };
     } catch (err) {
       return rejectWithValue(err.message || 'Failed to fetch definitions');
     }
@@ -43,7 +49,8 @@ const definitionSlice = createSlice({
         state.items = [];
       })
       .addCase(fetchDefinitions.fulfilled, (state, action) => {
-        state.items = action.payload;
+        state.items = action.payload.terms;
+        state.categories = action.payload.categories;
         state.status = STATUS.SUCCESS;
       })
       .addCase(fetchDefinitions.rejected, (state) => {

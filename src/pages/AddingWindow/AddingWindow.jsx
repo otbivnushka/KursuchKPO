@@ -84,7 +84,7 @@ const AddingWindow = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.add}>
-        <h1>Add definition</h1>
+        <h3>Add definition</h3>
         <div className={styles.mainInfo}>
           <div>
             <TextBox label="Term name" value={term} onChange={(e) => setTerm(e.target.value)} />

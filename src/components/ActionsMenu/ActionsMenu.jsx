@@ -4,14 +4,24 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserData } from '../../redux/slices/userSlice';
 import styles from './ActionsMenu.module.scss';
-import likeIcon from '../../assets/ui/like.svg';
-import likedIcon from '../../assets/ui/liked.svg';
-import copyIcon from '../../assets/ui/copy.svg';
-import pinIcon from '../../assets/ui/pin.svg';
-import pinedIcon from '../../assets/ui/pined.svg';
-import sourceIcon from '../../assets/ui/source.svg';
-import printIcon from '../../assets/ui/print.svg';
-import editIcon from '../../assets/ui/edit.svg';
+import likeLightIcon from '../../assets/ui/light/like_light.svg';
+import likedLightIcon from '../../assets/ui/light/liked_light.svg';
+import copyLightIcon from '../../assets/ui/light/copy_light.svg';
+import pinLightIcon from '../../assets/ui/light/pin_light.svg';
+import pinedLightIcon from '../../assets/ui/light/pined_light.svg';
+import sourceLightIcon from '../../assets/ui/light/source_light.svg';
+import printLightIcon from '../../assets/ui/light/print_light.svg';
+import editLightIcon from '../../assets/ui/light/edit_light.svg';
+
+import likeDarkIcon from '../../assets/ui/dark/like_dark.svg';
+import likedDarkIcon from '../../assets/ui/dark/liked_dark.svg';
+import copyDarkIcon from '../../assets/ui/dark/copy_dark.svg';
+import pinDarkIcon from '../../assets/ui/dark/pin_dark.svg';
+import pinedDarkIcon from '../../assets/ui/dark/pined_dark.svg';
+import sourceDarkIcon from '../../assets/ui/dark/source_dark.svg';
+import printDarkIcon from '../../assets/ui/dark/print_dark.svg';
+import editDarkIcon from '../../assets/ui/dark/edit_dark.svg';
+
 import AddNote from '../AddNote/AddNote';
 import SuggestEdition from '../SuggestEdition/SuggestEdition';
 
@@ -24,7 +34,7 @@ const ActionsMenu = ({ id }) => {
   const [pined, setPined] = useState({});
   const [addNoteOpened, setAddNoteOpened] = useState(false);
   const [addSuggestionOpened, setAddSuggestionOpened] = useState(false);
-
+  const { theme } = useSelector((state) => state.settings);
   const definitionInfo = useSelector((state) =>
     state.definition.items.find((item) => item.id === id)
   );
@@ -99,7 +109,18 @@ const ActionsMenu = ({ id }) => {
 
         <div className={`${styles.links} ${open ? styles.show : ''}`}>
           <button onClick={() => handleLike()}>
-            <img src={liked ? likedIcon : likeIcon} alt="" />
+            <img
+              src={
+                liked
+                  ? theme === 'dark'
+                    ? likedLightIcon
+                    : likedDarkIcon
+                  : theme === 'dark'
+                  ? likeLightIcon
+                  : likeDarkIcon
+              }
+              alt=""
+            />
             <span>{t('like')}</span>
           </button>
           <button
@@ -107,23 +128,34 @@ const ActionsMenu = ({ id }) => {
               navigator.clipboard.writeText(definitionInfo.term + ' - ' + definitionInfo.definition)
             }
           >
-            <img src={copyIcon} alt="" />
+            <img src={theme === 'dark' ? copyLightIcon : copyDarkIcon} alt="" />
             <span>{t('copy')}</span>
           </button>
           <button onClick={() => handlePin()}>
-            <img src={pined ? pinedIcon : pinIcon} alt="" />
+            <img
+              src={
+                pined
+                  ? theme === 'dark'
+                    ? pinedLightIcon
+                    : pinedDarkIcon
+                  : theme === 'dark'
+                  ? pinLightIcon
+                  : pinDarkIcon
+              }
+              alt=""
+            />
             <span>{t('pin')}</span>
           </button>
           <button onClick={() => window.api.openBrowserWindow(definitionInfo.source)}>
-            <img src={sourceIcon} alt="" />
+            <img src={theme === 'dark' ? sourceLightIcon : sourceDarkIcon} alt="" />
             <span>{t('source')}</span>
           </button>
           <button onClick={() => handlePrint()}>
-            <img src={printIcon} alt="" />
+            <img src={theme === 'dark' ? printLightIcon : printDarkIcon} alt="" />
             <span>{t('print')}</span>
           </button>
           <button onClick={() => handleSugg()}>
-            <img src={editIcon} alt="" />
+            <img src={theme === 'dark' ? editLightIcon : editDarkIcon} alt="" />
             <span>{t('edit')}</span>
           </button>
           {/* <button onClick={() => navigate(`/edit/${id}`)}>

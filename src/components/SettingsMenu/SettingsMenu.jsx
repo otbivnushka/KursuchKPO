@@ -4,8 +4,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setTheme, setLang, saveSettings } from '../../redux/slices/settingsSlice';
 import styles from './SettingsMenu.module.scss';
 import SelectBox from '../SelectBox/SelectBox';
-import settingsIconLight from '../../assets/ui/settings_light.svg';
-import settingsIconDark from '../../assets/ui/settings_dark.svg';
+import settingsIconLight from '../../assets/ui/light/settings_light.svg';
+import settingsIconDark from '../../assets/ui/dark/settings_dark.svg';
 
 const SettingsMenu = () => {
   const { t } = useTranslation();

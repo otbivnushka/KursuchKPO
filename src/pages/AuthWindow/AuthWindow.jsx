@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styles from './AuthWindow.module.scss';
-
+import { setUser, resetStatus } from '../../redux/slices/userSlice';
 import Button from '../../components/Button/Button';
 import TextBox from '../../components/TextBox/TextBox';
 import LoadingPageScreen from '../../components/LoadingPageScreen/LoadingPageScreen';
@@ -24,18 +24,27 @@ const AuthWindow = () => {
 
   const { status, user } = useSelector((state) => state.user);
 
-  const [login, setLogin] = useState('user');
+  const [login, setLogin] = useState('');
   const [password, setPassword] = useState('user');
   const [errorMessage, setErrorMessage] = useState('');
+  const [buttonClicked, setButtonClicked] = useState(true);
+
+  // useEffect(() => {
+  //   dispatch(resetStatus()); // обнуляем статус
+  //   console.log(user);
+  //   console.log(status);
+  // }, []);
 
   useEffect(() => {
-    if (status === STATUS.SUCCESS && user) {
+    setButtonClicked(false);
+    if (status === STATUS.SUCCESS && user !== null && user.justLoggedIn) {
       navigate('/main');
     }
     if (status === STATUS.ERROR) {
       setErrorMessage(t('wrong-ip'));
     }
-  }, [status, user, navigate, t]);
+    console.log(status);
+  }, [buttonClicked, user, status]);
 
   const handleCloseApp = () => window.api.closeApp();
   const handleRegistration = () => navigate('/registration');
@@ -47,6 +56,7 @@ const AuthWindow = () => {
     }
     setErrorMessage('');
     dispatch(authorization({ login, password }));
+    setButtonClicked(true);
   };
 
   const isLoading = status === STATUS.LOADING;

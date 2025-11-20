@@ -29,9 +29,13 @@
   "service-name": "Vocabulary",
   "search": "Search",
   "search-settings": "Search settings",
-  "search-by-tags": "Search by tags",
   "category-of-definition": "Category of definition",
+  "select-cat": "Select category",
   "sort-by": "Sort by",
+  "rate": "Rate",
+  "view-as": "View as",
+  "grid": "Grid",
+  "string": "String",
   "clear": "Clear",
   "settings": "Settings",
   "theme": "Theme",
@@ -41,7 +45,6 @@
   "en": "English",
   "ru": "Russian",
   "de": "German",
-  "be": "Belarusian",
   "read": "Read",
 
   "category": "Category",
@@ -58,7 +61,7 @@
   "like": "Like",
   "copy": "Copy",
   "pin": "Pin",
-  "source": "Open source",
+  "open-source": "Open source",
   "print": "Print",
   "edit": "Edit",
 
@@ -66,5 +69,34 @@
   "date-of-registration": "Date of registration: ",
   "my-notes": "My notes",
   "my-messages": "My messages",
-  "logout": "Logout"
+  "logout": "Logout",
+
+  "add-def": "Add definition",
+  "delete-def": "Delete definition",
+  "cancel-delete": "Cancel deletion",
+
+  "term-name": "Term name",
+  "meaning": "Meaning",
+  "choose-cat": "Choose category",
+  "type-new-cat": "Type new category",
+  "or": "OR",
+  "difficulty": "Difficulty: ",
+  "easy": "Easy",
+  "normal": "Normal",
+  "medium": "Medium",
+  "hard": "Hard",
+  "extreme": "Extreme",
+  "image": "Image",
+  "source": "Source",
+  "add": "Add",
+  "cancel": "Cancel",
+
+  "add-note": "Add Note",
+  "save": "Save",
+  "back": "Back",
+
+  "send-sug": "Send Suggestion",
+  "send": "Send",
+
+  "note-for": "Note for:"
 }
