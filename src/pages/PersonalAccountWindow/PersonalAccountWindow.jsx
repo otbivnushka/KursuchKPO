@@ -9,7 +9,7 @@ import maxImg from '../../assets/ui/max.jpg';
 import MessagesContainer from '../../components/MessagesContainer/MessagesContainer';
 import Button from '../../components/Button/Button';
 import { formatDateTime } from '../../utils/format';
-import { updateMessages, setUser } from '../../redux/slices/userSlice';
+import { updateMessages, setUser, resetStatus } from '../../redux/slices/userSlice';
 import SendMessage from '../../components/SendMessage/SendMessage';
 
 const PersonalAccountWindow = () => {
@@ -30,6 +30,10 @@ const PersonalAccountWindow = () => {
     dispatch(updateMessages([]));
   };
 
+  if (!userInfo) {
+    return null;
+  }
+
   return (
     <>
       {sendMessageOpened && <SendMessage setSendMessageOpened={setSendMessageOpened} />}
@@ -46,10 +50,10 @@ const PersonalAccountWindow = () => {
             <div className={styles.info__text}>
               <div className={styles.info__date}>ID: {userInfo.id}</div>
               <div className={styles.info__name}>
-                {t('name')} {userInfo.username}
+                {t('name')}: {userInfo.username}
               </div>
               <div className={styles.info__date}>
-                {t('date-of-registration')} {formatDateTime(userInfo.registrationDate)}
+                {t('date-of-registration')}: {formatDateTime(userInfo.registrationDate)}
               </div>
             </div>
           </div>
@@ -71,6 +75,8 @@ const PersonalAccountWindow = () => {
               <Button
                 variant="secondary"
                 onClick={() => {
+                  dispatch(setUser(null)); // сброс user
+                  dispatch(resetStatus()); // сброс статуса
                   navigate('/auth');
                 }}
               >

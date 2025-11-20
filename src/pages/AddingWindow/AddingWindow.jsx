@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import styles from './AddingWindow.module.scss';
 import TextBox from '../../components/TextBox/TextBox';
@@ -10,6 +11,7 @@ import Button from '../../components/Button/Button';
 import createTermPayload from '../../utils/jsonTermin';
 
 const AddingWindow = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [lang, setLang] = useState('en');
 
@@ -51,7 +53,7 @@ const AddingWindow = () => {
 
   const handleAdd = async () => {
     try {
-      const labels = ['Easy', 'Normal', 'Medium', 'Hard', 'Extreme'];
+      const labels = ['easy', 'normal', 'medium', 'hard', 'extreme'];
       const category = categoryTextbox || categories[categorySelect - 1].label;
       const payload = createTermPayload(
         {
@@ -84,12 +86,16 @@ const AddingWindow = () => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.add}>
-        <h3>Add definition</h3>
+        <h3>{t('add-def-title')}</h3>
         <div className={styles.mainInfo}>
           <div>
-            <TextBox label="Term name" value={term} onChange={(e) => setTerm(e.target.value)} />
+            <TextBox
+              label={t('term-name')}
+              value={term}
+              onChange={(e) => setTerm(e.target.value)}
+            />
             <TextArea
-              label="Meaning"
+              label={t('meaning')}
               value={definitions[lang]}
               onChange={(e) => handleDefinitionChange(e.target.value)}
             />
@@ -100,14 +106,14 @@ const AddingWindow = () => {
         </div>
         <div className={styles.category}>
           <SelectBox
-            label="Choose category"
+            label={t('choose-cat')}
             options={categories}
             value={categorySelect}
             onChange={(e) => setCategorySelect(e.target.value)}
           />
-          <h3>OR</h3>
+          <h3>{t('or')}</h3>
           <TextBox
-            label="Type new category"
+            label={t('type-new-cat')}
             value={categoryTextbox}
             onChange={(e) => setCategoryTextbox(e.target.value)}
           />
@@ -115,14 +121,14 @@ const AddingWindow = () => {
         <div className={styles.difficulty}>
           <SliderDifficulty value={difficulty} onChange={setDifficulty} />
         </div>
-        <TextBox label="Image" value={image} onChange={(e) => setImage(e.target.value)} />
-        <TextBox label="Source" value={source} onChange={(e) => setSource(e.target.value)} />
+        <TextBox label={t('image')} value={image} onChange={(e) => setImage(e.target.value)} />
+        <TextBox label={t('source')} value={source} onChange={(e) => setSource(e.target.value)} />
 
         <Button variant="primary" onClick={handleAdd}>
-          Add
+          {t('add')}
         </Button>
         <Button variant="secondary" onClick={() => navigate('/main')}>
-          Cancel
+          {t('cancel')}
         </Button>
       </div>
     </div>

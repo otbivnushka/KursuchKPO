@@ -31,4 +31,11 @@ function parseLine(str) {
   return [first.trim(), second.trim()];
 }
 
-export { formatDateTime, averageToString, parseLine };
+function parseTerms(arr) {
+  return arr.map((item) => {
+    const [term, id] = item.split('/');
+    return { term, id };
+  });
+}
+
+export { formatDateTime, averageToString, parseLine, parseTerms };

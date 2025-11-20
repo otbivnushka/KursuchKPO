@@ -24,7 +24,7 @@ const DefinitionBlock = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleDeletion = async () => {
-    const response = await window.api.sendAndWaitResponse({
+    await window.api.sendAndWaitResponse({
       Command: 'DELETE_TERM',
       Payload: {
         term: id,
@@ -59,7 +59,9 @@ const DefinitionBlock = ({
               <h4>
                 {t('date')}: {formatDateTime(lastEdition).split(' ')[0]}
               </h4>
-              <h4>Оценка: {averageToString(rating)}</h4>
+              <h4>
+                {t('rate')}: {averageToString(rating)}
+              </h4>
             </div>
             <Button onClick={() => navigate(`/definition/${id}`)}>{t('read')}</Button>
           </div>

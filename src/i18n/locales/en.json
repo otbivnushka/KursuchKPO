@@ -65,8 +65,8 @@
   "print": "Print",
   "edit": "Edit",
 
-  "name": "Name: ",
-  "date-of-registration": "Date of registration: ",
+  "name": "Name",
+  "date-of-registration": "Date of registration",
   "my-notes": "My notes",
   "my-messages": "My messages",
   "logout": "Logout",
@@ -75,12 +75,13 @@
   "delete-def": "Delete definition",
   "cancel-delete": "Cancel deletion",
 
+  "add-def-title": "Add definition",
   "term-name": "Term name",
   "meaning": "Meaning",
   "choose-cat": "Choose category",
   "type-new-cat": "Type new category",
   "or": "OR",
-  "difficulty": "Difficulty: ",
+  "difficulty": "Difficulty",
   "easy": "Easy",
   "normal": "Normal",
   "medium": "Medium",
@@ -98,5 +99,6 @@
   "send-sug": "Send Suggestion",
   "send": "Send",
 
-  "note-for": "Note for:"
+  "note-for": "Note for",
+  "message-from": "Message from"
 }

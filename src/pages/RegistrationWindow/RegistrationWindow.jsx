@@ -32,14 +32,25 @@ const RegistrationWindow = () => {
       setErrorText('Passwords do not match');
       return;
     }
-    const response = await window.api.sendAndWaitResponse({
-      Command: 'REGISTER',
-      Payload: {
-        login: login,
-        password: password,
-      },
-    });
-    console.log(response);
+    let response = {};
+    if (isAdmin) {
+      response = await window.api.sendAndWaitResponse({
+        Command: 'REGISTER',
+        Payload: {
+          login: login,
+          password: password,
+          adminKey: secretKey,
+        },
+      });
+    } else {
+      response = await window.api.sendAndWaitResponse({
+        Command: 'REGISTER',
+        Payload: {
+          login: login,
+          password: password,
+        },
+      });
+    }
     if (response.success) {
       navigate('/auth');
     }

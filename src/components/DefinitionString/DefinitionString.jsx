@@ -57,7 +57,9 @@ const DefinitionString = ({
           </h4>
         </div>
         <div className={styles.rate}>
-          <h4>Оценка: {averageToString(rating)}</h4>
+          <h4>
+            {t('rate')}: {averageToString(rating)}
+          </h4>
         </div>
         {deletion ? (
           <Button onClick={() => handleDeletion()}>Delete</Button>

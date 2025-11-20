@@ -14,7 +14,7 @@ const Aside = ({ onDeleteToggle, deletion }) => {
 
   return (
     <div className={styles.container}>
-      <button className={styles.link} onClick={() => navigate('/auth')}>
+      <button className={styles.link} onClick={() => navigate('/add')}>
         <img src={theme === 'dark' ? plusLightIcon : plusDarkIcon} alt="" />
         <span>{t('add-def')}</span>
       </button>

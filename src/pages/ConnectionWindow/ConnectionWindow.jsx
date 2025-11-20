@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import LoadingPageScreen from '../../components/LoadingPageScreen/LoadingPageScreen';
 
 const ConnectionWindow = () => {
-  const [ip, setIp] = useState('127.0.0.1');
+  const [ip, setIp] = useState('5.35.94.193');
   const [port, setPort] = useState('8888');
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');

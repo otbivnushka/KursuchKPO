@@ -10,8 +10,9 @@ function createWindow() {
   const win = new BrowserWindow({
     width: 1000,
     height: 800,
-    minWidth: 350, // минимальная ширина окна
+    minWidth: 350,
     minHeight: 480,
+    icon: path.join(__dirname, 'src', 'assets', 'icon.png'),
     autoHideMenuBar: true,
     title: 'Dictionary',
     webPreferences: {
@@ -28,6 +29,7 @@ function createBrowserWindow(url) {
   const win = new BrowserWindow({
     width: 1200,
     height: 900,
+    icon: path.join(__dirname, 'src', 'assets', 'icon.png'),
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,

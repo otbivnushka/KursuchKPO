@@ -21,6 +21,7 @@ const initialState = {
   categorySelect: '',
   sortBy: 'name',
   viewAs: 'grid',
+  searchBar: '',
 };
 
 const settingsSlice = createSlice({
@@ -45,6 +46,9 @@ const settingsSlice = createSlice({
     },
     setViewAs: (state, action) => {
       state.viewAs = action.payload;
+    },
+    setSearchBar: (state, action) => {
+      state.searchBar = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -78,5 +82,6 @@ const settingsSlice = createSlice({
       });
   },
 });
-export const { setTheme, setLang, setCategorySelect, setSortBy, setViewAs } = settingsSlice.actions;
+export const { setTheme, setLang, setCategorySelect, setSortBy, setViewAs, setSearchBar } =
+  settingsSlice.actions;
 export default settingsSlice.reducer;

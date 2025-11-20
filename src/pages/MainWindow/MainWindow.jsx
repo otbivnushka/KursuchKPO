@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
 import { fetchDefinitions } from '../../redux/slices/definitionSlice';
 import { fetchUserData } from '../../redux/slices/userSlice';
 import styles from './MainWindow.module.scss';
@@ -20,8 +19,8 @@ const MainWindow = () => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { items: definitions, status } = useSelector((state) => state.definition);
-  const { categorySelect, sortBy, viewAs } = useSelector((state) => state.settings);
-  const { username } = useSelector((state) => state.user.user);
+  const { categorySelect, sortBy, viewAs, searchBar } = useSelector((state) => state.settings);
+  const { username, personality } = useSelector((state) => state.user.user) || '';
   const [deletion, setDeletion] = useState(false);
 
   useEffect(() => {
@@ -51,7 +50,6 @@ const MainWindow = () => {
           <Logo />
 
           <SearchBar />
-
           <div className={styles.menues}>
             <UserButton>{username}</UserButton>
             <SettingsMenu />
@@ -59,12 +57,23 @@ const MainWindow = () => {
         </header>
 
         <div className={styles.content}>
-          <Aside onDeleteToggle={handleDelete} deletion={deletion} />
+          {personality === 'Admin' && <Aside onDeleteToggle={handleDelete} deletion={deletion} />}
 
-          <div className={clsx(styles.definitions, viewAs === 'grid' && styles.definitions__grid)}>
+          <div
+            className={clsx(
+              styles.definitions,
+              viewAs === 'grid' && styles.definitions__grid,
+              personality === 'Admin' && styles.definitions__admin
+            )}
+          >
             {sortItems(definitions, sortBy)
               .filter((obj) => {
                 return categorySelect.length === 0 ? true : obj.category === categorySelect;
+              })
+              .filter((obj) => {
+                return searchBar.length === 0
+                  ? true
+                  : obj.term.toLowerCase().includes(searchBar.toLowerCase());
               })
               .map((definition, index) =>
                 viewAs === 'grid' ? (

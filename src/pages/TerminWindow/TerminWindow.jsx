@@ -6,6 +6,7 @@ import RatingBar from '../../components/RatingBar/RatingBar';
 import ActionsMenu from '../../components/ActionsMenu/ActionsMenu';
 import styles from './TerminWindow.module.scss';
 import Button from '../../components/Button/Button';
+import { parseTerms } from '../../utils/format';
 
 const TerminWindow = () => {
   const { t } = useTranslation();
@@ -47,11 +48,11 @@ const TerminWindow = () => {
         </div>
       </header>
 
-      <h3>
+      <h3 className={styles.category}>
         {t('category')}: {definitionInfo.category}
       </h3>
 
-      <h3>{t('definition')}</h3>
+      <h3 className={styles.category}>{t('definition')}</h3>
       <div className={styles.definition}>
         <img src={definitionInfo.media[0]?.url} alt="term illustration" />
         <p>{definitionInfo.translations[language]}</p>
@@ -80,17 +81,17 @@ const TerminWindow = () => {
         </div>
       </div>
 
-      <div className={styles.corrections}>
+      {/* <div className={styles.corrections}>
         <h3>{t('corrections-history')}</h3>
-      </div>
+      </div> */}
 
       <div className={styles.watchAlso}>
         <h3>{t('watch-also')}</h3>
-        <ul>
-          {definitionInfo.relatedTerms.map((item) => (
-            <li>{item}</li>
+        <p>
+          {parseTerms(definitionInfo.relatedTerms).map((item) => (
+            <span onClick={() => navigate(`/definition/${item.id}`)}>{item.term}</span>
           ))}
-        </ul>
+        </p>
       </div>
     </div>
   );

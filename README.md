@@ -1,70 +1,70 @@
-# Getting Started with Create React App
+# Term Dictionary
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**Term Dictionary** is an application for storing, searching, and displaying terms. It is designed for students, teachers, and anyone who wants a convenient reference for various terms and definitions.
 
-## Available Scripts
+## Features
 
-In the project directory, you can run:
+- Store and quickly search terms
+- Organize terms by categories for easier learning
+- Support multiple views: list or grid
+- Sort terms by name, popularity, date, or rating
+- Multi-language support using i18next
+- Modern interface built with React and Electron
 
-### `npm start`
+## Technologies
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Frontend: React, Redux Toolkit, React Router, i18next
+- Desktop: Electron
+- Styling: CSS Modules
+- Testing: React Testing Library
+- Utilities: clsx, web-vitals
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+## Installation and Running
 
-### `npm test`
+1. Clone the repository
+   git clone https://github.com/yourusername/term-dictionary.git
+   cd term-dictionary
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+2. Install dependencies
+   npm install
 
-### `npm run build`
+3. Run the application
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+   - For browser development: npm start
+   - To run Electron: npm run electron
+   - For simultaneous development and Electron: npm run electron-dev
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+4. Build the project for production
+   npm run build
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Project Structure
 
-### `npm run eject`
+- src/ — source code
+- src/components/ — React components
+- src/redux/ — Redux slices and store
+- src/assets/ — images and styles
+- public/ — static files
+- main.js — main Electron file
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+## Usage
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Once the application is running, you can:
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- Search for terms using the search bar
+- Sort and filter terms by categories
+- View terms in list or grid format
+- Add new terms (if the feature is extended)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+## Contributing
 
-## Learn More
+This project is open-source. You can contribute improvements or fixes:
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+1. Fork the repository
+2. Create a new branch: git checkout -b feature/your-feature-name
+3. Commit your changes: git commit -m "Add new feature"
+4. Push the branch to your fork: git push origin feature/your-feature-name
+5. Create a Pull Request to the main repository
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## License
 
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+This project is licensed under the **MIT License**.

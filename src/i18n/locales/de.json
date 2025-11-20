@@ -65,16 +65,17 @@
   "print": "Drucken",
   "edit": "Bearbeiten",
 
-  "name": "Name: ",
-  "date-of-registration": "Registrierungsdatum: ",
+  "name": "Name",
+  "date-of-registration": "Registrierungsdatum",
   "my-notes": "Meine Notizen",
   "my-messages": "Meine Nachrichten",
   "logout": "Abmelden",
 
-  "add-def": "Definition hinzufügen",
-  "delete-def": "Definition löschen",
+  "add-def": "Hinzufügen",
+  "delete-def": "Löschen",
   "cancel-delete": "Löschen abbrechen",
 
+  "add-def-title": "Definition hinzufügen",
   "term-name": "Begriff",
   "meaning": "Bedeutung",
   "choose-cat": "Kategorie auswählen",
@@ -98,5 +99,6 @@
   "send-sug": "Vorschlag senden",
   "send": "Senden",
 
-  "note-for": "Notiz für:"
+  "note-for": "Notiz für",
+  "message-from": "Nachricht von"
 }

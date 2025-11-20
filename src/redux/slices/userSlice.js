@@ -81,8 +81,7 @@ const userSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-
-      // ===== AUTH =====
+      // ауф
       .addCase(authorization.pending, (state) => {
         state.status = STATUS.LOADING;
       })
@@ -94,8 +93,7 @@ const userSlice = createSlice({
         state.status = STATUS.ERROR;
         state.user = null;
       })
-
-      // ===== FETCH USER DATA =====
+      // фетч юзер дата
       .addCase(fetchUserData.pending, (state) => {
         state.status = STATUS.LOADING;
       })

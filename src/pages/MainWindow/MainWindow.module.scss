@@ -61,7 +61,7 @@
   //grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
   grid-auto-rows: min-content;
   gap: 10px;
-  width: calc(100% - 100px);
+  width: 100%;
   height: 100%;
   overflow-y: auto;
   overflow-x: hidden;
@@ -71,6 +71,9 @@
 
   &__grid {
     grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  }
+  &__admin {
+    width: calc(100% - 100px);
   }
 
   &::-webkit-scrollbar {
@@ -98,7 +101,7 @@
     padding: 5px 10px;
   }
 
-  .definitions {
+  .definitions__admin {
     width: calc(100% - 50px);
   }
 }

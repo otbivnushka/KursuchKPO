@@ -3,12 +3,10 @@ import { useTranslation } from 'react-i18next';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import styles from './AuthWindow.module.scss';
-import { setUser, resetStatus } from '../../redux/slices/userSlice';
+import { resetStatus, authorization } from '../../redux/slices/userSlice';
 import Button from '../../components/Button/Button';
 import TextBox from '../../components/TextBox/TextBox';
 import LoadingPageScreen from '../../components/LoadingPageScreen/LoadingPageScreen';
-
-import { authorization } from '../../redux/slices/userSlice';
 
 const STATUS = {
   WAITING: 'waiting',
@@ -25,26 +23,23 @@ const AuthWindow = () => {
   const { status, user } = useSelector((state) => state.user);
 
   const [login, setLogin] = useState('');
-  const [password, setPassword] = useState('user');
+  const [password, setPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
-  const [buttonClicked, setButtonClicked] = useState(true);
-
-  // useEffect(() => {
-  //   dispatch(resetStatus()); // обнуляем статус
-  //   console.log(user);
-  //   console.log(status);
-  // }, []);
 
   useEffect(() => {
-    setButtonClicked(false);
-    if (status === STATUS.SUCCESS && user !== null && user.justLoggedIn) {
-      navigate('/main');
+    // Сброс статуса при размонтировании
+    return () => dispatch(resetStatus());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if (status === STATUS.SUCCESS && user) {
+      navigate('/main'); // сразу после успешного логина
     }
+
     if (status === STATUS.ERROR) {
       setErrorMessage(t('wrong-ip'));
     }
-    console.log(status);
-  }, [buttonClicked, user, status]);
+  }, [status, user, t, navigate]);
 
   const handleCloseApp = () => window.api.closeApp();
   const handleRegistration = () => navigate('/registration');
@@ -54,9 +49,9 @@ const AuthWindow = () => {
       setErrorMessage(t('error-auth-empty'));
       return;
     }
+
     setErrorMessage('');
     dispatch(authorization({ login, password }));
-    setButtonClicked(true);
   };
 
   const isLoading = status === STATUS.LOADING;

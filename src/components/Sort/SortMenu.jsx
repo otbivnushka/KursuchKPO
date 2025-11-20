@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import styles from './SortMenu.module.scss';
@@ -16,8 +16,9 @@ const SortMenu = () => {
   const { categorySelect, sortBy, viewAs } = useSelector((state) => state.settings);
   const { categories } = useSelector((state) => state.definition);
 
+  const menuRef = useRef(null);
+
   useEffect(() => {
-    console.log(categories);
     dispatch(setCategorySelect([]));
     const mapped = categories.map((u) => ({
       label: u,
@@ -25,8 +26,20 @@ const SortMenu = () => {
     }));
     mapped.unshift({ label: t('select-cat'), value: '' });
     setCategorySelectList(mapped);
-    console.log(mapped);
-  }, [categories, dispatch]);
+  }, [categories, dispatch, t]);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return (
     <div>
@@ -43,7 +56,7 @@ const SortMenu = () => {
         <span></span>
       </button>
 
-      <div className={`${styles.sort} ${isOpen ? styles.show : ''}`}>
+      <div ref={menuRef} className={`${styles.sort} ${isOpen ? styles.show : ''}`}>
         <h3>{t('search-settings')}</h3>
 
         <SelectBox

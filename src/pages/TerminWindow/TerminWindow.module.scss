@@ -11,6 +11,9 @@
   p {
     line-height: 1.6;
   }
+  .category {
+    margin-bottom: 12px;
+  }
 }
 
 .header {
@@ -71,7 +74,8 @@
 }
 
 .info {
-  margin-bottom: 16px;
+  display: flex;
+  gap: 10px;
 
   div {
     margin: 4px 0;
@@ -119,26 +123,24 @@
 }
 
 .watchAlso {
-  margin-top: 20px;
-
-  ul {
-    list-style: circle;
-    padding: 0 0 0 20px;
-
-    li {
-      padding: 6px 0;
-      //border-bottom: 1px solid #333;
+  display: flex;
+  gap: 15px;
+  p {
+    display: flex;
+    gap: 10px;
+    span {
+      font-weight: 800;
+      text-decoration: underline;
       cursor: pointer;
-      transition: color 0.2s;
-
       &:hover {
-        color: #000000;
+        text-decoration: none;
+        color: var(--primary-color);
       }
     }
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 900px) {
   .terminWindow {
     padding: 5px 10px;
   }

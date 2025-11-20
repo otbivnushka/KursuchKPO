@@ -28,13 +28,14 @@
 
     h3 {
       font-size: 18px;
-      color: var(--block-text-color);
+      //color: var(--block-text-color);
       margin: 0;
       font-weight: 600;
     }
   }
 
   &__info {
+    color: var(--text-color);
     display: flex;
     align-items: center;
     justify-content: space-between;
@@ -52,7 +53,7 @@
     h4 {
       margin: 2px 0;
       font-size: 0.9rem;
-      color: var(--block-text-color);
+      //color: var(--block-text-color);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;

@@ -1,12 +1,16 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import styles from './SliderDifficulty.module.scss';
 
 const SliderDifficulty = ({ value, onChange }) => {
-  const labels = ['Easy', 'Normal', 'Medium', 'Hard', 'Extreme'];
+  const { t } = useTranslation();
+  const labels = [t('easy'), t('normal'), t('medium'), t('hard'), t('extreme')];
 
   return (
     <div className={styles.sliderWrapper}>
-      <label className={styles.label}>Difficulty: {labels[value - 1]}</label>
+      <label className={styles.label}>
+        {t('difficulty')}: {labels[value - 1]}
+      </label>
       <input
         type="range"
         min="1"

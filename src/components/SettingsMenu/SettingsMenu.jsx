@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { setTheme, setLang, saveSettings } from '../../redux/slices/settingsSlice';
@@ -12,7 +12,20 @@ const SettingsMenu = () => {
   const dispatch = useDispatch();
   const { theme, lang } = useSelector((state) => state.settings);
 
-  const [isOpen, setOpen] = React.useState(false);
+  const [isOpen, setOpen] = useState(false);
+  const menuRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpen(false);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleThemeChange = (value) => {
     dispatch(setTheme(value));
@@ -38,7 +51,7 @@ const SettingsMenu = () => {
         />
       </button>
 
-      <div className={`${styles.menu} ${isOpen ? styles.show : ''}`}>
+      <div ref={menuRef} className={`${styles.menu} ${isOpen ? styles.show : ''}`}>
         <h3>{t('settings')}</h3>
 
         <SelectBox
