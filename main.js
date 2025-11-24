@@ -73,7 +73,6 @@ ipcMain.handle('settings:get', async () => {
   return JSON.parse(data);
 });
 
-// Запись
 ipcMain.handle('settings:set', async (event, newSettings) => {
   fs.writeFileSync(settingsPath, JSON.stringify(newSettings, null, 2));
   return true;

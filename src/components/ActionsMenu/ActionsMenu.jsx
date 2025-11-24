@@ -44,6 +44,7 @@ const ActionsMenu = ({ id }) => {
 
   const favorites = useSelector((state) => state.user.user?.favorites);
   const pin = useSelector((state) => state.user.user?.notes);
+  const personality = useSelector((state) => state.user.user?.personality);
 
   useEffect(() => {
     if (favorites) setLiked(favorites.includes(id));
@@ -56,9 +57,9 @@ const ActionsMenu = ({ id }) => {
   const handleLike = async () => {
     setLiked(!liked);
     const response = await axios.post(
-      'http://localhost:8888/api/terms/like',
+      `${window.api.getUrl()}/api/terms/like`,
       {
-        term: definitionInfo.Id,
+        term: definitionInfo.id,
         isFavorite: !liked,
       },
       {
@@ -74,7 +75,11 @@ const ActionsMenu = ({ id }) => {
   };
 
   const handleSugg = async () => {
-    setAddSuggestionOpened(true);
+    if (personality === 'Admin') {
+      navigate(`/edit/${id}`);
+    } else {
+      setAddSuggestionOpened(true);
+    }
   };
 
   const handlePrint = () => {
@@ -88,7 +93,7 @@ const ActionsMenu = ({ id }) => {
           pined={pined}
           setPined={setPined}
           setAddNoteOpened={setAddNoteOpened}
-          id={definitionInfo.Id}
+          id={definitionInfo.id}
           name={definitionInfo.term}
         ></AddNote>
       )}

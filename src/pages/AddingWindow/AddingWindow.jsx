@@ -34,7 +34,7 @@ const AddingWindow = () => {
   useEffect(() => {}, [relatedTerms, lang]);
   useEffect(() => {
     const load = async () => {
-      const response = (await axios.get('http://localhost:8888/api/categories')).data;
+      const response = (await axios.get(`${window.api.getUrl()}/api/categories`)).data;
 
       setCategories(
         response.map((category, idx) => ({
@@ -75,7 +75,7 @@ const AddingWindow = () => {
         return;
       }
       const base64 = await fileToBase64(image);
-      const res = await axios.post('http://localhost:8888/api/upload', {
+      const res = await axios.post(`${window.api.getUrl()}/api/upload`, {
         name: image.name,
         base64: base64,
       });
@@ -99,7 +99,11 @@ const AddingWindow = () => {
         },
         'currentUser'
       );
-      const response = await axios.post('http://localhost:8888/api/terms', payload);
+      const response = await axios.post(`${window.api.getUrl()}/api/terms`, payload, {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      });
 
       if (response.status === 200) navigate('/main');
     } catch (err) {
@@ -145,19 +149,23 @@ const AddingWindow = () => {
         <div className={styles.difficulty}>
           <SliderDifficulty value={difficulty} onChange={setDifficulty} />
         </div>
-        <DragAndDropUpload onFileSelected={handleFile} />
+        <div className={styles.dragWrapper}>
+          <DragAndDropUpload onFileSelected={handleFile} />
+        </div>
         <TextBox label={t('source')} value={source} onChange={(e) => setSource(e.target.value)} />
         <TermRelationManager
           allTerms={allTerms || []}
           initialRelated={relatedTerms}
           setOnDrop={setRelatedTerms}
         />
-        <Button variant="primary" onClick={handleAdd}>
-          {t('add')}
-        </Button>
-        <Button variant="secondary" onClick={() => navigate('/main')}>
-          {t('cancel')}
-        </Button>
+        <div className={styles.btnWrapper}>
+          <Button variant="primary" onClick={handleAdd}>
+            {t('add')}
+          </Button>
+          <Button variant="secondary" onClick={() => navigate('/main')}>
+            {t('cancel')}
+          </Button>
+        </div>
       </div>
     </div>
   );

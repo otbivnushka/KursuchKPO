@@ -14,7 +14,9 @@ const SendMessage = ({ setSendMessageOpened }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   useEffect(() => {
     const load = async () => {
-      const response = (await axios.get('http://localhost:8888/api/user')).data;
+      const { data: response } = await axios.get(`${window.api.getUrl()}/api/user`, {
+        headers: { Authorization: localStorage.getItem('token') },
+      });
 
       if (response !== null) {
         const mapped = response.map((u) => ({
@@ -32,7 +34,7 @@ const SendMessage = ({ setSendMessageOpened }) => {
 
   const handleSave = async () => {
     await axios.post(
-      'http://localhost:8888/api/message',
+      `${window.api.getUrl()}/api/message`,
       {
         to: selectedUser,
         theme: theme,

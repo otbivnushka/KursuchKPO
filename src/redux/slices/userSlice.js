@@ -19,7 +19,7 @@ export const authorization = createAsyncThunk(
     try {
       const message = { login, password };
 
-      const res = await axios.post('http://localhost:8888/api/user/auth', message);
+      const res = await axios.post(`${window.api.getUrl()}/api/user/auth`, message);
       localStorage.setItem('token', res.data.token);
       return res.data;
     } catch (err) {
@@ -34,7 +34,7 @@ export const fetchUserData = createAsyncThunk(
     try {
       const token = localStorage.getItem('token');
       const res = await axios.put(
-        'http://localhost:8888/api/user',
+        `${window.api.getUrl()}/api/user`,
         {},
         {
           headers: {

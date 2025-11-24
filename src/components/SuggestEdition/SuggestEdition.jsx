@@ -11,7 +11,7 @@ const SuggestEdition = ({ setSuggestEditionOpened, name }) => {
   const [suggText, setSuggText] = useState('');
   const handleSave = async () => {
     await axios.post(
-      'http://localhost:8888/api/message/suggestion',
+      `${window.api.getUrl()}/api/message/suggestion`,
       {
         termName: 'Suggestion for: ' + name,
         suggestion: suggText,

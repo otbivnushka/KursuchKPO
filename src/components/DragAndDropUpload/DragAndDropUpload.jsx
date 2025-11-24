@@ -1,8 +1,10 @@
 import React, { useState, useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 import clsx from 'clsx';
 import styles from './DragAndDropUpload.module.scss';
 
 export default function DragAndDropUpload({ onFileSelected }) {
+  const { t } = useTranslation();
   const [isDragging, setIsDragging] = useState(false);
   const [fileName, setFileName] = useState(null);
 
@@ -50,7 +52,7 @@ export default function DragAndDropUpload({ onFileSelected }) {
         onDrop={handleDrop}
       >
         <input type="file" style={{ display: 'none' }} onChange={handleFilePick} />
-        {fileName || 'Drag & Drop your file here or click to select'}
+        {fileName || t('drag-n-drop')}
       </label>
     </div>
   );

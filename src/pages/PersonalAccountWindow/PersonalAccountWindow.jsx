@@ -27,7 +27,7 @@ const PersonalAccountWindow = () => {
   };
 
   const handleClearMessages = async () => {
-    await axios.delete('http://localhost:8888/api/message', {
+    await axios.delete(`${window.api.getUrl()}/api/message`, {
       headers: {
         Authorization: localStorage.getItem('token'),
       },
@@ -74,7 +74,7 @@ const PersonalAccountWindow = () => {
             <div style={{ display: 'flex', gap: '10px' }}>
               {active === 1 && (
                 <Button variant="secondary" onClick={() => handleClearMessages()}>
-                  Очистить сообщения
+                  {t('clear')}
                 </Button>
               )}
               <Button

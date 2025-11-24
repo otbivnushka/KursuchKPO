@@ -25,7 +25,7 @@ const DefinitionBlock = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleDeletion = async () => {
-    await axios.delete('http://localhost:8888/api/terms', {
+    await axios.delete(`${window.api.getUrl()}/api/terms`, {
       data: { term: id },
     });
 

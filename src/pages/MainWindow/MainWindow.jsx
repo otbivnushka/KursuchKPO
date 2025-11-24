@@ -28,6 +28,7 @@ const MainWindow = () => {
       try {
         await dispatch(fetchDefinitions());
         await dispatch(fetchUserData());
+        console.log(window.api.getUrl());
       } catch (err) {
         console.error('Ошибка при загрузке данных:', err);
       }
@@ -39,7 +40,9 @@ const MainWindow = () => {
   const handleDelete = () => {
     setDeletion(!deletion);
   };
-
+  useEffect(() => {
+    console.log(status);
+  }, [status]);
   if (status === 'loading') return <LoadingPageScreen>{t('loading')}</LoadingPageScreen>;
   if (status === 'error') return <div>Ошибка при загрузке данных</div>;
 

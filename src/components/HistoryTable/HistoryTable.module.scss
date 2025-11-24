@@ -1,0 +1,31 @@
+.container {
+  width: 100%;
+  height: 300px;
+  overflow-y: auto;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th,
+.table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--text-secondary-color);
+  text-align: left;
+}
+
+.table th {
+  background-color: var(--bg-aside-color);
+  position: sticky; // фиксируем заголовок при скролле
+  top: 0;
+}
+
+.empty {
+  text-align: center;
+  padding: 20px;
+  color: var(--text-secondary-color);
+}

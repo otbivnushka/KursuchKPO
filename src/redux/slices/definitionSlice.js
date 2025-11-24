@@ -19,8 +19,8 @@ export const fetchDefinitions = createAsyncThunk(
   async (_, { rejectWithValue }) => {
     try {
       const [termsRes, categoriesRes] = await Promise.all([
-        axios.get('http://localhost:8888/api/terms'),
-        axios.get('http://localhost:8888/api/categories'),
+        axios.get(`${window.api.getUrl()}/api/terms`),
+        axios.get(`${window.api.getUrl()}/api/categories`),
       ]);
 
       return {

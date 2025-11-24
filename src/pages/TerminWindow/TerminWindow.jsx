@@ -8,7 +8,8 @@ import ActionsMenu from '../../components/ActionsMenu/ActionsMenu';
 import styles from './TerminWindow.module.scss';
 import Button from '../../components/Button/Button';
 import LoadingPageScreen from '../../components/LoadingPageScreen/LoadingPageScreen';
-import { parseTerms } from '../../utils/format';
+import HistoryTable from '../../components/HistoryTable/HistoryTable';
+import { parseTerms, formatDateTime } from '../../utils/format';
 import axios from 'axios';
 
 const TerminWindow = () => {
@@ -31,10 +32,10 @@ const TerminWindow = () => {
   }, [id, dispatch]);
 
   const handleRate = async (value) => {
-    if (!definitionInfo?.Id) return;
+    if (!definitionInfo?.id) return;
     await axios.post(
-      'http://localhost:8888/api/rate',
-      { term: definitionInfo.Id, rating: value },
+      `${window.api.getUrl()}/api/rate`,
+      { term: definitionInfo.id, rating: value },
       {
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -44,10 +45,10 @@ const TerminWindow = () => {
   };
 
   const handleCancelRate = async () => {
-    if (!definitionInfo?.Id) return;
+    if (!definitionInfo?.id) return;
     await axios.post(
-      'http://localhost:8888/api/rate',
-      { term: definitionInfo.Id, rating: 0 },
+      `${window.api.getUrl()}/api/rate`,
+      { term: definitionInfo.id, rating: 0 },
       {
         headers: {
           Authorization: localStorage.getItem('token'),
@@ -64,13 +65,13 @@ const TerminWindow = () => {
       <header className={styles.header}>
         <h1>{definitionInfo.term}</h1>
         <div>
-          <ActionsMenu id={definitionInfo.Id} />
+          <ActionsMenu id={definitionInfo.id} />
           <Button onClick={() => navigate('/main')}>{t('go-back')}</Button>
         </div>
       </header>
 
       <h3 className={styles.category}>
-        {t('category')}: {definitionInfo.category}
+        {t('category')}: {definitionInfo.category}, {t('author')}: {definitionInfo.author}
       </h3>
 
       <h3 className={styles.category}>{t('definition')}</h3>
@@ -83,26 +84,33 @@ const TerminWindow = () => {
 
       <div className={styles.info}>
         <div>
-          {t('dificulty')}: {definitionInfo.difficultyLevel}
+          {t('dificulty')}: {t(definitionInfo.difficultyLevel)}
         </div>
         <div>
           {t('popularity')}: {definitionInfo.popularity}
+        </div>
+        <div>
+          {t('created-on')}: {formatDateTime(definitionInfo.addedDate)}
+        </div>
+        <div>
+          {t('last-access')}: {formatDateTime(definitionInfo.lastAccessed)}
         </div>
       </div>
 
       <div className={styles.ratingWrapper}>
         <div className={styles.rating}>
+          <h5>
+            {t('total-rate')}: {definitionInfo.difficultyRatings.length}
+          </h5>
           <RatingBar
             rating={userRate?.Rating ?? null}
             onSubmit={handleRate}
             onCancel={handleCancelRate}
           />
-          <h5>
-            {t('total-rate')}: {definitionInfo.difficultyRatings.length}
-          </h5>
         </div>
       </div>
-
+      <p className={styles.historyLabel}>{t('corrections-history')}</p>
+      <HistoryTable history={definitionInfo.history} />
       <div className={styles.watchAlso}>
         <h3>{t('watch-also')}</h3>
         <p>

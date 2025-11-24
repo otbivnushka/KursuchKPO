@@ -43,17 +43,26 @@
   justify-content: space-between;
   width: 100%;
   margin-bottom: 12px;
-
+  opacity: 0;
+  transition: all 0.1s ease-in-out;
   button {
-    padding: 4px 12px;
+    font-family: inherit;
+    font-size: inherit;
+    width: 120px;
+    padding: 8px 12px;
     cursor: pointer;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    background: #fff;
+    border: 1px solid var(--border-color);
+    color: var(--text-color);
+    border-radius: 16px;
+    background: var(--bg-color);
     transition: background 0.2s;
 
     &:hover {
-      background: #eee;
+      background: var(--hover-color);
     }
   }
+}
+
+.showButtons {
+  opacity: 1;
 }

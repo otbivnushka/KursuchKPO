@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import clsx from 'clsx';
 import { useTranslation } from 'react-i18next';
 import styles from './RatingBar.module.scss';
 
 const RatingBar = ({ rating = null, onSubmit, onCancel }) => {
   const { t } = useTranslation();
   const [selected, setSelected] = useState(rating);
+  const [btnText, setBtnText] = useState('Отправить');
 
   const handleSelect = (value) => {
     setSelected(value);
@@ -17,6 +19,7 @@ const RatingBar = ({ rating = null, onSubmit, onCancel }) => {
 
   const handleSubmit = () => {
     if (onSubmit) onSubmit(selected);
+    setBtnText('Отправлено');
   };
 
   // если rating === null и пользователь ещё не выбирал — кнопки не показываем
@@ -54,16 +57,14 @@ const RatingBar = ({ rating = null, onSubmit, onCancel }) => {
         ))}
       </div>
 
-      {showButtons && (
-        <div className={styles.buttons}>
-          <button type="button" onClick={handleCancel}>
-            Отмена
-          </button>
-          <button type="button" onClick={handleSubmit}>
-            Отправить
-          </button>
-        </div>
-      )}
+      <div className={clsx(styles.buttons, showButtons && styles.showButtons)}>
+        <button type="button" onClick={handleCancel}>
+          Отмена
+        </button>
+        <button type="button" onClick={handleSubmit}>
+          {btnText}
+        </button>
+      </div>
     </div>
   );
 };

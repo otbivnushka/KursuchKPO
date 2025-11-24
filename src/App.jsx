@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import './scss/app.scss';
-import ConnectionWindow from './pages/ConnectionWindow/ConnectionWindow';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { I18nextProvider } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -26,7 +25,6 @@ const App = () => {
       <I18nextProvider i18n={i18n}>
         <BrowserRouter>
           <Routes>
-            {/* <Route path="/" element={<ConnectionWindow />} /> */}
             <Route path="/" element={<AuthWindow />} />
             <Route path="/registration" element={<RegistrationWindow />} />
             <Route path="/main" element={<MainWindow />} />

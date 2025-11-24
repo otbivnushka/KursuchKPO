@@ -16,7 +16,7 @@ export const fetchDefinition = createAsyncThunk(
   'view/fetchDefinition',
   async (id, { rejectWithValue }) => {
     try {
-      const response = await axios.post('http://localhost:8888/api/terms/visited', { term: id });
+      const response = await axios.post(`${window.api.getUrl()}/api/terms/visited`, { term: id });
       return response.data;
     } catch (err) {
       return rejectWithValue(err.response?.data || err.message || 'Failed to fetch definition');

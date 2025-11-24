@@ -22,7 +22,7 @@ const RegistrationWindow = () => {
   }, [login, password, repeatPassword, secretKey]);
 
   const handleGoBack = () => {
-    navigate('/auth');
+    navigate('/');
   };
   const handleRegistration = async () => {
     if (password === '' || login === '') {
@@ -35,13 +35,13 @@ const RegistrationWindow = () => {
     }
     let response = {};
     if (isAdmin) {
-      response = await axios.post('http://localhost:8888/api/user/reg', {
+      response = await axios.post(`${window.api.getUrl()}/api/user/reg`, {
         login: login,
         password: password,
         adminKey: secretKey,
       });
     } else {
-      response = await axios.post('http://localhost:8888/api/user/reg', {
+      response = await axios.post(`${window.api.getUrl()}/api/user/reg`, {
         login: login,
         password: password,
       });
@@ -88,7 +88,7 @@ const RegistrationWindow = () => {
           <Button onClick={() => handleRegistration()}>{t('registration')}</Button>
           <div>
             <Button variant="secondary" onClick={() => setIsAdmin(!isAdmin)}>
-              {isAdmin ? 'I dont wanna be admin' : 'I wanna be admin'}
+              {isAdmin ? t('dont-want-to-be-admin') : t('want-to-be-admin')}
             </Button>
             <Button variant="secondary" onClick={handleGoBack}>
               {t('go-back')}

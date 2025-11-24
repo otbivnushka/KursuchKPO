@@ -15,7 +15,7 @@ function formatDateTime(isoString) {
 }
 
 function averageToString(arr) {
-  if (!arr || arr.length === 0) return 'нет оценок';
+  if (!arr || arr.length === 0) return '_';
 
   const sum = arr.reduce((acc, val) => acc + val, 0);
   const avg = sum / arr.length;
@@ -47,4 +47,22 @@ function formatRelatedTerms(arr) {
   });
 }
 
-export { formatDateTime, averageToString, parseLine, parseTerms, formatRelatedTerms };
+function parseRelatedTerms(arr) {
+  return arr.map((str) => {
+    const lastSlashIndex = str.lastIndexOf('/');
+
+    return {
+      term: str.slice(0, lastSlashIndex), // всё до последнего "/"
+      id: str.slice(lastSlashIndex + 1), // всё после него
+    };
+  });
+}
+
+export {
+  formatDateTime,
+  averageToString,
+  parseLine,
+  parseTerms,
+  formatRelatedTerms,
+  parseRelatedTerms,
+};

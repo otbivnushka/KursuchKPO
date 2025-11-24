@@ -1,136 +1,170 @@
 import React, { useState, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import styles from './EditWindow.module.scss';
+
 import TextBox from '../../components/TextBox/TextBox';
 import TextArea from '../../components/TextArea/TextArea';
-import SelectBox from '../../components/SelectBox/SelectBox';
+//import SelectBox from '../../components/SelectBox/SelectBox';
+import CategorySelector from '../../components/CategorySelector/CategorySelector';
 import SliderDifficulty from '../../components/SliderDifficulty/SliderDifficulty';
 import LanguageSelector from '../../components/LanguageSelector/LanguageSelector';
+import TermRelationManager from '../../components/TermRelationManager/TermRelationManager';
 import Button from '../../components/Button/Button';
-import createTermPayload from '../../utils/jsonTermin';
+import LoadingPageScreen from '../../components/LoadingPageScreen/LoadingPageScreen';
+
+import { formatRelatedTerms, parseRelatedTerms } from '../../utils/format';
+import { fetchDefinition } from '../../redux/slices/viewSlice';
+import { fetchDefinitions } from '../../redux/slices/definitionSlice';
+
+import axios from 'axios';
 
 const EditWindow = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const { id } = useParams();
 
-  const labels = ['Easy', 'Normal', 'Medium', 'Hard', 'Extreme'];
-
-  const definitionObj = useSelector((state) =>
-    state.definition.items.find((item) => item.id === id)
-  );
+  const { items: allTerms, status } = useSelector((state) => state.definition);
+  const editingTerm = useSelector((state) => state.view.definitionInfo);
 
   const [lang, setLang] = useState('en');
-
-  const [term, setTerm] = useState('');
   const [definitions, setDefinitions] = useState({ en: '', ru: '', de: '' });
-  const [categorySelect, setCategorySelect] = useState('');
-  const [categoryTextbox, setCategoryTextbox] = useState('');
+  const [category, setCategory] = useState('');
   const [difficulty, setDifficulty] = useState(3);
   const [source, setSource] = useState('');
-  const [image, setImage] = useState('');
-
   const [categories, setCategories] = useState([]);
+  const [relatedTerms, setRelatedTerms] = useState([]);
+  const [changeNote, setChangeNote] = useState('');
 
-  // грузим категории
   useEffect(() => {
-    const load = async () => {
-      const response = await window.api.sendAndWaitResponse({
-        Command: 'GET_CATEGORIES',
-        Payload: {},
-      });
-
+    const loadCategories = async () => {
+      const response = (await axios.get(`${window.api.getUrl()}/api/categories`)).data;
       setCategories(
-        response.payload.map((category, idx) => ({
-          value: String(idx + 1),
-          label: category,
+        response.map((cat) => ({
+          label: cat,
+          value: cat,
         }))
       );
     };
-    load();
+    loadCategories();
   }, []);
 
-  // заполняем поля существующими данными
   useEffect(() => {
-    if (!definitionObj) return;
+    dispatch(fetchDefinition(id));
+    dispatch(fetchDefinitions());
+  }, [id, dispatch]);
 
-    setTerm(definitionObj.term || '');
+  useEffect(() => {
+    console.log(allTerms, relatedTerms);
+  }, [allTerms, relatedTerms]);
+
+  useEffect(() => {
+    if (!editingTerm || !editingTerm.term) return;
 
     setDefinitions({
-      en: definitionObj.translations?.en || '',
-      ru: definitionObj.translations?.ru || '',
-      de: definitionObj.translations?.de || '',
+      en: editingTerm.translations?.en || '',
+      ru: editingTerm.translations?.ru || '',
+      de: editingTerm.translations?.de || '',
     });
 
-    setDifficulty(labels.indexOf(definitionObj.difficultyLevel) + 1);
-    setSource(definitionObj.source || '');
-    setImage(definitionObj.media?.[0]?.url || ''); // если есть
+    setSource(editingTerm.source || '');
+    setCategory(editingTerm.category || '');
+    setDifficulty(editingTerm.difficultyLevelIndex || 3);
 
-    const idx = categories.findIndex((c) => c.label === definitionObj.category);
-    if (idx !== -1) {
-      setCategorySelect(String(idx + 1));
-    } else {
-      setCategoryTextbox(definitionObj.category);
-    }
-  }, [definitionObj, categories]);
+    setRelatedTerms(parseRelatedTerms(editingTerm.relatedTerms) || []);
+  }, [editingTerm]);
 
   const handleDefinitionChange = (text) => {
-    setDefinitions((prev) => ({
-      ...prev,
-      [lang]: text,
-    }));
+    setDefinitions((prev) => ({ ...prev, [lang]: text }));
   };
-  const handleSave = async () => {};
+
+  const handleSave = async () => {
+    try {
+      if (changeNote === '') return alert('Please enter a change note.');
+      const labels = ['easy', 'normal', 'medium', 'hard', 'extreme'];
+      const body = {
+        id,
+        newDefinition: definitions,
+        newCategory: category,
+        newDifficulty: labels[difficulty - 1],
+        newSource: source,
+        newRelated: formatRelatedTerms(relatedTerms),
+        changeNote,
+      };
+      console.log(body);
+      const response = await axios
+        .put(`${window.api.getUrl()}/api/terms`, body, {
+          headers: {
+            Authorization: localStorage.getItem('token'),
+          },
+        })
+        .catch((err) => console.log(err));
+      console.log(response);
+      if (response.status === 200) {
+        navigate('/main');
+      }
+    } catch (err) {
+      alert(err.message);
+    }
+  };
+
+  if (status === 'loading') return <LoadingPageScreen>{t('loading')}</LoadingPageScreen>;
+  if (status === 'error') return <div>Ошибка при загрузке данных</div>;
 
   return (
     <div className={styles.wrapper}>
       <div className={styles.add}>
-        <h1>Edit definition</h1>
+        <h3>
+          {t('editing')} {editingTerm.term}
+        </h3>
 
         <div className={styles.mainInfo}>
-          <div>
-            <TextBox label="Term name" value={term} onChange={(e) => setTerm(e.target.value)} />
+          <TextBox
+            label={t('edit-note')}
+            value={changeNote}
+            onChange={(e) => setChangeNote(e.target.value)}
+          />
+          <TextArea
+            label={t('meaning')}
+            value={definitions[lang]}
+            onChange={(e) => handleDefinitionChange(e.target.value)}
+          />
 
-            <TextArea
-              label="Meaning"
-              value={definitions[lang] || ''}
-              onChange={(e) => handleDefinitionChange(e.target.value)}
-            />
-
-            <div className={styles.languageSelector}>
-              <LanguageSelector value={lang} onChange={setLang} />
-            </div>
+          <div className={styles.languageSelector}>
+            <LanguageSelector value={lang} onChange={setLang} />
           </div>
         </div>
 
-        <div className={styles.category}>
-          <SelectBox
-            label="Choose category"
-            options={categories}
-            value={categorySelect}
-            onChange={(e) => setCategorySelect(e.target.value)}
-          />
-          <h3>OR</h3>
-          <TextBox
-            label="Type new category"
-            value={categoryTextbox}
-            onChange={(e) => setCategoryTextbox(e.target.value)}
-          />
-        </div>
-
+        <CategorySelector
+          categories={categories}
+          initialValue={category}
+          onChange={(e) => setCategory(e)}
+        />
+        {/* Difficulty */}
         <div className={styles.difficulty}>
           <SliderDifficulty value={difficulty} onChange={setDifficulty} />
         </div>
 
-        <TextBox label="Image" value={image} onChange={(e) => setImage(e.target.value)} />
-        <TextBox label="Source" value={source} onChange={(e) => setSource(e.target.value)} />
+        {/* Source */}
+        <TextBox label={t('source')} value={source} onChange={(e) => setSource(e.target.value)} />
 
-        <Button variant="primary" onClick={handleSave}>
-          Save
-        </Button>
-        <Button variant="secondary" onClick={() => navigate('/main')}>
-          Cancel
-        </Button>
+        {/* Related */}
+        <TermRelationManager
+          allTerms={allTerms}
+          initialRelated={relatedTerms}
+          setOnDrop={setRelatedTerms}
+        />
+        <div className={styles.btnsWrapper}>
+          <Button variant="primary" onClick={handleSave}>
+            {t('save')}
+          </Button>
+
+          <Button variant="secondary" onClick={() => navigate('/main')}>
+            {t('cancel')}
+          </Button>
+        </div>
       </div>
     </div>
   );

@@ -26,7 +26,7 @@ const DefinitionString = ({
 
   const dispatch = useDispatch();
   const handleDeletion = async () => {
-    await axios.delete('http://localhost:8888/api/terms', {
+    await axios.delete(`${window.api.getUrl()}/api/terms`, {
       data: { term: id },
     });
     dispatch(removeTermById(id));
@@ -60,7 +60,7 @@ const DefinitionString = ({
           </h4>
         </div>
         {deletion ? (
-          <Button onClick={() => handleDeletion()}>Delete</Button>
+          <Button onClick={() => handleDeletion()}>{t('delete-def')}</Button>
         ) : (
           <Button onClick={() => navigate(`/definition/${id}`)}>{t('read')}</Button>
         )}

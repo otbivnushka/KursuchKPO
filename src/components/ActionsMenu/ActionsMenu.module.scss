@@ -39,17 +39,16 @@
   }
 }
 
-/* блок ссылок */
 .links {
   display: flex;
-  gap: 12px;
+  gap: 2px;
 
   button {
     border: none;
     background-color: transparent;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 7px;
     padding: 8px 12px;
     border-radius: 8px;
     font-size: 0.9rem;
@@ -69,7 +68,7 @@
   }
 
   /* мобильное скрытие */
-  @media (max-width: 979px) {
+  @media (max-width: 1150px) {
     position: absolute;
     top: 120%;
     right: 0;
@@ -92,8 +91,7 @@
   }
 }
 
-/* на десктопе бургер не показываем */
-@media (min-width: 979px) {
+@media (min-width: 1150px) {
   .burger {
     display: none;
   }

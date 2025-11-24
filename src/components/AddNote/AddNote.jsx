@@ -11,8 +11,9 @@ const AddNote = ({ pined, setPined, setAddNoteOpened, id, name }) => {
   const { t } = useTranslation();
   const [noteText, setNoteText] = useState(parseLine(pined?.NotedData)[1] ?? '');
   const handleSave = async () => {
+    console.log(noteText, id, localStorage.getItem('token'));
     const response = await axios.post(
-      'http://localhost:8888/api/note',
+      `${window.api.getUrl()}/api/note`,
       {
         term: id,
         note: '(' + name + '): ' + noteText,
@@ -25,7 +26,7 @@ const AddNote = ({ pined, setPined, setAddNoteOpened, id, name }) => {
       }
     );
     setAddNoteOpened(false);
-    setPined({ notedTerm: id, NotedData: noteText });
+    setPined({ notedTerm: id, NotedData: '(' + name + '): ' + noteText });
   };
   return (
     <div className={styles.overlay}>

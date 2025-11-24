@@ -6,15 +6,19 @@ import NoteBlock from '../NoteBlock/NoteBlock';
 import MessageBlock from '../MessageBlock/MessageBlock';
 import Button from '../Button/Button';
 import { parseLine, formatDateTime } from '../../utils/format';
+import DefinitionString from '../DefinitionString/DefinitionString';
 
 const MessagesContainer = ({ active, setActive }) => {
   const { t } = useTranslation();
-  const tabs = [t('my-notes'), t('my-messages')];
+  const tabs = [t('my-notes'), t('my-messages'), t('my-favorites')];
   const userNotes = useSelector((state) => state.user.user.notes);
   const userMessages = useSelector((state) => state.user.user.messages);
+  const userFavorites = useSelector((state) => state.user.user.favorites);
+  const { items } = useSelector((state) => state.definition);
 
   const [notes, setNotes] = useState([]);
   const [messages, setMessages] = useState([]);
+  const [favorites, setFavorites] = useState([]);
   useEffect(() => {
     const mappedNotes = userNotes.map((u, i) => {
       const [termName, termNote] = parseLine(u.NotedData);
@@ -26,6 +30,10 @@ const MessagesContainer = ({ active, setActive }) => {
         source: u.NotedTerm,
       };
     });
+    setNotes(mappedNotes);
+  }, [userNotes]);
+
+  useEffect(() => {
     const mappedMessages = userMessages.map((u, i) => {
       return {
         id: i + 1,
@@ -35,9 +43,13 @@ const MessagesContainer = ({ active, setActive }) => {
         content: u.Content,
       };
     });
-    setNotes(mappedNotes);
     setMessages(mappedMessages);
-  }, [userNotes, userMessages]);
+  }, [userMessages]);
+
+  useEffect(() => {
+    const mappedFavorites = items?.filter((item) => userFavorites.includes(item.id));
+    setFavorites(mappedFavorites);
+  }, [userFavorites, items]);
 
   return (
     <div className={styles.message}>
@@ -58,6 +70,20 @@ const MessagesContainer = ({ active, setActive }) => {
         {active === 0 && notes.map((note) => <NoteBlock key={note.id + note.date} note={note} />)}
         {active === 1 &&
           messages.map((mess) => <MessageBlock key={mess.id + mess.date} mess={mess} />)}
+        {active === 2 &&
+          favorites.map((definition, index) => (
+            <DefinitionString
+              key={index}
+              id={definition.id}
+              definition={definition.term}
+              category={definition.category}
+              popularity={definition.popularity}
+              dificulty={definition.difficultyLevel}
+              lastEdition={definition.addedDate}
+              rating={definition.difficultyRatings}
+              image_url={definition.mediaUrl}
+            />
+          ))}
       </div>
     </div>
   );
