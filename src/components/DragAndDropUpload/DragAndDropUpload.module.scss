@@ -1,0 +1,16 @@
+.dropzone {
+  width: 100%;
+  height: 160px;
+  border: 2px dashed var(--border-color);
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background: var(--bg-color);
+  transition: background 0.2s;
+}
+
+.dropzone.dragging {
+  background: var(--bg-aside-color);
+}

@@ -5,6 +5,7 @@ import Button from '../Button/Button';
 import clsx from 'clsx';
 import SelectBox from '../SelectBox/SelectBox';
 import TextBox from '../TextBox/TextBox';
+import axios from 'axios';
 
 const SendMessage = ({ setSendMessageOpened }) => {
   const [messText, setMessText] = useState('');
@@ -13,36 +14,32 @@ const SendMessage = ({ setSendMessageOpened }) => {
   const [selectedUser, setSelectedUser] = useState(null);
   useEffect(() => {
     const load = async () => {
-      const response = await window.api.sendAndWaitResponse({
-        Command: 'GET_USERS',
-        Payload: {},
-      });
+      const response = (await axios.get('http://localhost:8888/api/user')).data;
 
-      if (response?.payload) {
-        const mapped = response.payload.map((u) => ({
+      if (response !== null) {
+        const mapped = response.map((u) => ({
           label: u.login,
           value: u.id,
         }));
 
         setUsersList(mapped);
+        setSelectedUser(mapped[0].value);
       }
     };
 
     load();
   }, []);
 
-  useEffect(() => {
-    console.log(selectedUser);
-  }, [selectedUser]);
   const handleSave = async () => {
-    const response = await window.api.sendAndWaitResponse({
-      Command: 'SEND_MESSAGE',
-      Payload: {
+    await axios.post(
+      'http://localhost:8888/api/message',
+      {
         to: selectedUser,
         theme: theme,
         content: messText,
       },
-    });
+      { headers: { Authorization: localStorage.getItem('token') } }
+    );
     setSendMessageOpened(false);
   };
 

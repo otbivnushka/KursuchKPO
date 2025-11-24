@@ -26,8 +26,8 @@ const App = () => {
       <I18nextProvider i18n={i18n}>
         <BrowserRouter>
           <Routes>
-            <Route path="/" element={<ConnectionWindow />} />
-            <Route path="/auth" element={<AuthWindow />} />
+            {/* <Route path="/" element={<ConnectionWindow />} /> */}
+            <Route path="/" element={<AuthWindow />} />
             <Route path="/registration" element={<RegistrationWindow />} />
             <Route path="/main" element={<MainWindow />} />
             <Route path="/definition/:id" element={<TerminWindow />} />

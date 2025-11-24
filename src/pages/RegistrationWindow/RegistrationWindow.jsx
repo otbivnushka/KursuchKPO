@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
@@ -34,25 +35,19 @@ const RegistrationWindow = () => {
     }
     let response = {};
     if (isAdmin) {
-      response = await window.api.sendAndWaitResponse({
-        Command: 'REGISTER',
-        Payload: {
-          login: login,
-          password: password,
-          adminKey: secretKey,
-        },
+      response = await axios.post('http://localhost:8888/api/user/reg', {
+        login: login,
+        password: password,
+        adminKey: secretKey,
       });
     } else {
-      response = await window.api.sendAndWaitResponse({
-        Command: 'REGISTER',
-        Payload: {
-          login: login,
-          password: password,
-        },
+      response = await axios.post('http://localhost:8888/api/user/reg', {
+        login: login,
+        password: password,
       });
     }
-    if (response.success) {
-      navigate('/auth');
+    if (response.status === 200) {
+      navigate('/');
     }
   };
 

@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const STATUS = {
   LOADING: 'loading',
@@ -12,24 +13,23 @@ const initialState = {
   status: STATUS.LOADING,
 };
 
+// Асинхронный thunk для получения терминов и категорий через axios
 export const fetchDefinitions = createAsyncThunk(
   'definitions/fetchDefinitions',
   async (_, { rejectWithValue }) => {
     try {
-      const message_terms = {
-        Command: 'GET_TERMS',
-        Payload: {},
-      };
-      const message_categories = {
-        Command: 'GET_CATEGORIES',
-        Payload: {},
-      };
-      const response_terms = await window.api.sendAndWaitResponse(message_terms);
-      const response_categories = await window.api.sendAndWaitResponse(message_categories);
+      const [termsRes, categoriesRes] = await Promise.all([
+        axios.get('http://localhost:8888/api/terms'),
+        axios.get('http://localhost:8888/api/categories'),
+      ]);
 
-      return { terms: response_terms.payload, categories: response_categories.payload };
+      return {
+        terms: termsRes.data,
+        categories: categoriesRes.data,
+      };
     } catch (err) {
-      return rejectWithValue(err.message || 'Failed to fetch definitions');
+      // Если нужно, можно достать err.response.data.message
+      return rejectWithValue(err.response?.data || err.message || 'Failed to fetch definitions');
     }
   }
 );
@@ -41,12 +41,17 @@ const definitionSlice = createSlice({
     setItems(state, action) {
       state.items = action.payload;
     },
+    removeTermById(state, action) {
+      const idToRemove = action.payload;
+      state.items = state.items.filter((term) => term.id !== idToRemove);
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchDefinitions.pending, (state) => {
         state.status = STATUS.LOADING;
         state.items = [];
+        state.categories = [];
       })
       .addCase(fetchDefinitions.fulfilled, (state, action) => {
         state.items = action.payload.terms;
@@ -56,9 +61,10 @@ const definitionSlice = createSlice({
       .addCase(fetchDefinitions.rejected, (state) => {
         state.status = STATUS.ERROR;
         state.items = [];
+        state.categories = [];
       });
   },
 });
 
-export const { setItems } = definitionSlice.actions;
+export const { setItems, removeTermById } = definitionSlice.actions;
 export default definitionSlice.reducer;

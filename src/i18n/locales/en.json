@@ -71,9 +71,9 @@
   "my-messages": "My messages",
   "logout": "Logout",
 
-  "add-def": "Add definition",
-  "delete-def": "Delete definition",
-  "cancel-delete": "Cancel deletion",
+  "add-def": "Add def.",
+  "delete-def": "Delete",
+  "cancel-delete": "Cancel",
 
   "add-def-title": "Add definition",
   "term-name": "Term name",

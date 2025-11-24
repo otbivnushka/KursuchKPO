@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -35,9 +36,7 @@ const ActionsMenu = ({ id }) => {
   const [addNoteOpened, setAddNoteOpened] = useState(false);
   const [addSuggestionOpened, setAddSuggestionOpened] = useState(false);
   const { theme } = useSelector((state) => state.settings);
-  const definitionInfo = useSelector((state) =>
-    state.definition.items.find((item) => item.id === id)
-  );
+  const definitionInfo = useSelector((state) => state.view.definitionInfo);
 
   useEffect(() => {
     dispatch(fetchUserData());
@@ -47,24 +46,27 @@ const ActionsMenu = ({ id }) => {
   const pin = useSelector((state) => state.user.user?.notes);
 
   useEffect(() => {
-    if (favorites) {
-      setLiked(favorites.includes(id));
-    }
-    if (pin) {
-      setPined(pin.find((item) => item.notedTerm === id));
-    }
-  }, [pin, favorites, id]);
+    if (favorites) setLiked(favorites.includes(id));
+  }, [favorites, id]);
+
+  useEffect(() => {
+    if (pin) setPined(pin.find((item) => item.NotedTerm === id));
+  }, [pin, id]);
 
   const handleLike = async () => {
-    const response = await window.api.sendAndWaitResponse({
-      Command: 'UPDATE_FAVORITE',
-      Payload: {
-        term: definitionInfo.id,
+    setLiked(!liked);
+    const response = await axios.post(
+      'http://localhost:8888/api/terms/like',
+      {
+        term: definitionInfo.Id,
         isFavorite: !liked,
       },
-    });
-    setLiked(!liked);
-    console.log(response);
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+        },
+      }
+    );
   };
 
   const handlePin = async () => {
@@ -86,7 +88,7 @@ const ActionsMenu = ({ id }) => {
           pined={pined}
           setPined={setPined}
           setAddNoteOpened={setAddNoteOpened}
-          id={id}
+          id={definitionInfo.Id}
           name={definitionInfo.term}
         ></AddNote>
       )}
@@ -125,7 +127,9 @@ const ActionsMenu = ({ id }) => {
           </button>
           <button
             onClick={() =>
-              navigator.clipboard.writeText(definitionInfo.term + ' - ' + definitionInfo.definition)
+              navigator.clipboard.writeText(
+                definitionInfo.term + ' - ' + definitionInfo.translations.ru
+              )
             }
           >
             <img src={theme === 'dark' ? copyLightIcon : copyDarkIcon} alt="" />

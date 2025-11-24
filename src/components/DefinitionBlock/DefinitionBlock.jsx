@@ -1,4 +1,5 @@
 import React from 'react';
+import axios from 'axios';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
@@ -6,7 +7,7 @@ import styles from './DefinitionBlock.module.scss';
 import Button from '../Button/Button';
 import { formatDateTime, averageToString } from '../../utils/format';
 import crossIcon from '../../assets/ui/cross.svg';
-import { fetchDefinitions } from '../../redux/slices/definitionSlice';
+import { removeTermById } from '../../redux/slices/definitionSlice';
 
 const DefinitionBlock = ({
   id,
@@ -24,13 +25,11 @@ const DefinitionBlock = ({
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const handleDeletion = async () => {
-    await window.api.sendAndWaitResponse({
-      Command: 'DELETE_TERM',
-      Payload: {
-        term: id,
-      },
+    await axios.delete('http://localhost:8888/api/terms', {
+      data: { term: id },
     });
-    dispatch(fetchDefinitions());
+
+    dispatch(removeTermById(id));
   };
   return (
     <div className={styles.block}>
@@ -54,7 +53,7 @@ const DefinitionBlock = ({
                 {t('popularity')}: {popularity}
               </h4>
               <h4>
-                {t('dificulty')}: {dificulty}
+                {t('dificulty')}: {t(dificulty)}
               </h4>
               <h4>
                 {t('date')}: {formatDateTime(lastEdition).split(' ')[0]}

@@ -1,0 +1,59 @@
+.container {
+  display: flex;
+  gap: 20px;
+}
+
+.column {
+  flex: 1;
+  border: 2px solid var(--border-color);
+  border-radius: 8px;
+  padding: 10px;
+  background: var(--bg-color);
+}
+
+.termList {
+  height: 200px; /* фиксированная высота колонки */
+  overflow-y: auto; /* вертикальная прокрутка при переполнении */
+  border: 1px dashed var(--border-color);
+  border-radius: 6px;
+  padding: 5px;
+  &::-webkit-scrollbar {
+    width: 9px;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: var(--text-secondary-color);
+    border-radius: 6px;
+    border: 2px solid var(--bg-aside-color); // чтобы был внутренний отступ
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: var(--bg-aside-color);
+    border-radius: 6px;
+  }
+
+  &::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+  }
+}
+
+.termItem {
+  padding: 5px 10px;
+  margin: 5px 0;
+  background: var(--bg-color);
+  border-radius: 4px;
+  cursor: grab;
+}
+
+.placeholder {
+  color: var(--text-secondary-color);
+  text-align: center;
+  margin-top: 50px;
+}
+
+.label {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  color: var(--text-secondary-color);
+}

@@ -17,22 +17,22 @@ const MessagesContainer = ({ active, setActive }) => {
   const [messages, setMessages] = useState([]);
   useEffect(() => {
     const mappedNotes = userNotes.map((u, i) => {
-      const [termName, termNote] = parseLine(u.notedData);
+      const [termName, termNote] = parseLine(u.NotedData);
       return {
         id: i + 1,
-        date: formatDateTime(u.timestamp),
+        date: formatDateTime(u.Timestamp),
         definition: termName,
         note: termNote,
-        source: u.notedTerm,
+        source: u.NotedTerm,
       };
     });
     const mappedMessages = userMessages.map((u, i) => {
       return {
         id: i + 1,
-        date: formatDateTime(u.timestamp),
-        author: u.author,
-        theme: u.theme,
-        content: u.content,
+        date: formatDateTime(u.Timestamp),
+        author: u.Author,
+        theme: u.Theme,
+        content: u.Content,
       };
     });
     setNotes(mappedNotes);
@@ -57,7 +57,7 @@ const MessagesContainer = ({ active, setActive }) => {
       <div className={styles.message__body}>
         {active === 0 && notes.map((note) => <NoteBlock key={note.id + note.date} note={note} />)}
         {active === 1 &&
-          messages.map((note) => <MessageBlock key={note.id + note.date} note={note} />)}
+          messages.map((mess) => <MessageBlock key={mess.id + mess.date} mess={mess} />)}
       </div>
     </div>
   );

@@ -4,18 +4,20 @@ import styles from './SuggestEdition.module.scss';
 import TextArea from '../TextArea/TextArea';
 import Button from '../Button/Button';
 import clsx from 'clsx';
+import axios from 'axios';
 
 const SuggestEdition = ({ setSuggestEditionOpened, name }) => {
   const { t } = useTranslation();
   const [suggText, setSuggText] = useState('');
   const handleSave = async () => {
-    await window.api.sendAndWaitResponse({
-      Command: 'SUGG_EDIT',
-      Payload: {
+    await axios.post(
+      'http://localhost:8888/api/message/suggestion',
+      {
         termName: 'Suggestion for: ' + name,
         suggestion: suggText,
       },
-    });
+      { headers: { Authorization: localStorage.getItem('token') } }
+    );
     setSuggestEditionOpened(false);
   };
   return (

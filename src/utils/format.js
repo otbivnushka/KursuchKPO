@@ -24,6 +24,7 @@ function averageToString(arr) {
 }
 
 function parseLine(str) {
+  if (!str) return [];
   const match = str.match(/^\((.+?)\):\s*(.+)$/);
   if (!match) return [];
 
@@ -38,4 +39,12 @@ function parseTerms(arr) {
   });
 }
 
-export { formatDateTime, averageToString, parseLine, parseTerms };
+function formatRelatedTerms(arr) {
+  return arr.map((item) => {
+    // удаляем все символы "/" из term
+    const cleanTerm = item.term.replace(/\//g, '');
+    return `${cleanTerm}/${item.id}`;
+  });
+}
+
+export { formatDateTime, averageToString, parseLine, parseTerms, formatRelatedTerms };

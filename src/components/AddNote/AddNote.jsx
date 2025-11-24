@@ -4,20 +4,28 @@ import styles from './AddNote.module.scss';
 import TextArea from '../TextArea/TextArea';
 import Button from '../Button/Button';
 import clsx from 'clsx';
+import axios from 'axios';
+import { parseLine } from '../../utils/format';
 
 const AddNote = ({ pined, setPined, setAddNoteOpened, id, name }) => {
   const { t } = useTranslation();
-  const [noteText, setNoteText] = useState(pined?.notedData || '');
+  const [noteText, setNoteText] = useState(parseLine(pined?.NotedData)[1] ?? '');
   const handleSave = async () => {
-    const response = await window.api.sendAndWaitResponse({
-      Command: 'ADD_NOTE',
-      Payload: {
+    const response = await axios.post(
+      'http://localhost:8888/api/note',
+      {
         term: id,
         note: '(' + name + '): ' + noteText,
       },
-    });
+      {
+        headers: {
+          Authorization: localStorage.getItem('token'),
+          'Content-Type': 'application/json',
+        },
+      }
+    );
     setAddNoteOpened(false);
-    setPined({ notedTerm: id, notedData: noteText });
+    setPined({ notedTerm: id, NotedData: noteText });
   };
   return (
     <div className={styles.overlay}>

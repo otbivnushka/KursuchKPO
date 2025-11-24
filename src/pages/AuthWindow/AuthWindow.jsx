@@ -27,15 +27,13 @@ const AuthWindow = () => {
   const [errorMessage, setErrorMessage] = useState('');
 
   useEffect(() => {
-    // Сброс статуса при размонтировании
     return () => dispatch(resetStatus());
   }, [dispatch]);
 
   useEffect(() => {
-    if (status === STATUS.SUCCESS && user) {
-      navigate('/main'); // сразу после успешного логина
+    if (user) {
+      navigate('/main');
     }
-
     if (status === STATUS.ERROR) {
       setErrorMessage(t('wrong-ip'));
     }

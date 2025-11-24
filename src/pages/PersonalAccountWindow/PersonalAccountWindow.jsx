@@ -11,6 +11,7 @@ import Button from '../../components/Button/Button';
 import { formatDateTime } from '../../utils/format';
 import { updateMessages, setUser, resetStatus } from '../../redux/slices/userSlice';
 import SendMessage from '../../components/SendMessage/SendMessage';
+import axios from 'axios';
 
 const PersonalAccountWindow = () => {
   const { t } = useTranslation();
@@ -26,7 +27,11 @@ const PersonalAccountWindow = () => {
   };
 
   const handleClearMessages = async () => {
-    await window.api.sendAndWaitResponse({ Command: 'CLEAR_MESSAGE', Payload: {} });
+    await axios.delete('http://localhost:8888/api/message', {
+      headers: {
+        Authorization: localStorage.getItem('token'),
+      },
+    });
     dispatch(updateMessages([]));
   };
 
@@ -77,7 +82,7 @@ const PersonalAccountWindow = () => {
                 onClick={() => {
                   dispatch(setUser(null)); // сброс user
                   dispatch(resetStatus()); // сброс статуса
-                  navigate('/auth');
+                  navigate('/');
                 }}
               >
                 {t('logout')}

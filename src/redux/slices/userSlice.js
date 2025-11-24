@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import axios from 'axios';
 
 const STATUS = {
   WAITING: 'waiting',
@@ -10,23 +11,19 @@ const STATUS = {
 const initialState = {
   user: null,
   status: STATUS.WAITING,
-  justLoggedIn: false,
 };
 
 export const authorization = createAsyncThunk(
   'user/authorization',
   async ({ login, password }, { rejectWithValue }) => {
     try {
-      const message = {
-        Command: 'AUTH',
-        Payload: { login, password },
-      };
+      const message = { login, password };
 
-      const response = await window.api.sendAndWaitResponse(message);
-
-      return response.payload;
+      const res = await axios.post('http://localhost:8888/api/user/auth', message);
+      localStorage.setItem('token', res.data.token);
+      return res.data;
     } catch (err) {
-      return rejectWithValue(err.message || 'Failed to auth');
+      return rejectWithValue(err.response?.data?.message || err.message || 'Failed to auth');
     }
   }
 );
@@ -35,16 +32,21 @@ export const fetchUserData = createAsyncThunk(
   'user/fetchUserData',
   async (_, { rejectWithValue }) => {
     try {
-      const message = {
-        Command: 'GET_USER_DATA',
-        Payload: {},
-      };
-
-      const response = await window.api.sendAndWaitResponse(message);
-
-      return response.payload;
+      const token = localStorage.getItem('token');
+      const res = await axios.put(
+        'http://localhost:8888/api/user',
+        {},
+        {
+          headers: {
+            Authorization: token,
+          },
+        }
+      );
+      return res.data;
     } catch (err) {
-      return rejectWithValue(err.message || 'Failed to fetch user data');
+      return rejectWithValue(
+        err.response?.data?.message || err.message || 'Failed to fetch user data'
+      );
     }
   }
 );
@@ -67,7 +69,7 @@ const userSlice = createSlice({
     },
 
     updateMessages(state, action) {
-      if (state.user) state.user.messages = action.payload;
+      if (state.user) state.user.Messages = action.payload;
     },
 
     updateRatedTerms(state, action) {
@@ -81,19 +83,21 @@ const userSlice = createSlice({
 
   extraReducers: (builder) => {
     builder
-      // ауф
+      // ayф
       .addCase(authorization.pending, (state) => {
         state.status = STATUS.LOADING;
       })
       .addCase(authorization.fulfilled, (state, action) => {
-        state.user = { ...action.payload };
+        state.user = action.payload;
+        state.token = action.payload.token;
         state.status = STATUS.SUCCESS;
       })
       .addCase(authorization.rejected, (state) => {
         state.status = STATUS.ERROR;
         state.user = null;
       })
-      // фетч юзер дата
+
+      // фетч юзер
       .addCase(fetchUserData.pending, (state) => {
         state.status = STATUS.LOADING;
       })

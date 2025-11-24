@@ -1,9 +1,7 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const fs = require('fs');
-const { Client } = require('./client');
 
-let client;
 let settingsPath;
 
 function createWindow() {
@@ -68,31 +66,6 @@ app.on('window-all-closed', () => {
 
 ipcMain.handle('close-app', () => {
   app.quit();
-});
-
-ipcMain.handle('connect-to-server', async (event, { ip, port }) => {
-  try {
-    client = new Client(ip, port);
-    await client.connect(5000); // ждёт 5 секунд максимум
-    return { success: true };
-  } catch (error) {
-    console.error('Ошибка подключения:', error.message);
-    return { success: false, error: error.message };
-  }
-});
-
-ipcMain.handle('send-message-get-response', async (event, messageObj) => {
-  if (!client) {
-    return { error: 'Client not connected' };
-  }
-
-  return new Promise((resolve) => {
-    client.onceMessage((response) => {
-      resolve(response);
-    });
-
-    client.sendJson(messageObj);
-  });
 });
 
 ipcMain.handle('settings:get', async () => {

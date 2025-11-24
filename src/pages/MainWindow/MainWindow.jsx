@@ -24,7 +24,7 @@ const MainWindow = () => {
   const [deletion, setDeletion] = useState(false);
 
   useEffect(() => {
-    const fetchData = async () => {
+    const load = async () => {
       try {
         await dispatch(fetchDefinitions());
         await dispatch(fetchUserData());
@@ -33,7 +33,7 @@ const MainWindow = () => {
       }
     };
 
-    fetchData();
+    load();
   }, [dispatch]);
 
   const handleDelete = () => {
@@ -86,7 +86,7 @@ const MainWindow = () => {
                     dificulty={definition.difficultyLevel}
                     lastEdition={definition.addedDate}
                     rating={definition.difficultyRatings}
-                    image_url={definition.media?.[0]?.url}
+                    image_url={definition.mediaUrl}
                     deletion={deletion}
                     setDeletion={setDeletion}
                   />
@@ -100,7 +100,7 @@ const MainWindow = () => {
                     dificulty={definition.difficultyLevel}
                     lastEdition={definition.addedDate}
                     rating={definition.difficultyRatings}
-                    image_url={definition.media?.[0]?.url}
+                    image_url={definition.mediaUrl}
                     deletion={deletion}
                     setDeletion={setDeletion}
                   />

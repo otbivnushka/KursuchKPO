@@ -7,7 +7,7 @@ const SelectBox = ({ label, value, onChange, options = [], error = '' }) => {
     <div className={styles.selectWrapper}>
       {label && <label className={styles.label}>{label}</label>}
       <select
-        value={value}
+        value={value ?? ''}
         onChange={onChange}
         className={clsx(styles.select, error && styles.selectError)}
       >

@@ -45,7 +45,7 @@ const SortMenu = () => {
     <div>
       <button
         className={`${styles.burger} ${isOpen ? styles.open : ''}`}
-        onClick={() => setOpen(!isOpen)}
+        onClick={() => (isOpen ? setOpen(false) : setOpen(true))}
         aria-label="Toggle sort menu"
       >
         <span></span>
@@ -64,7 +64,6 @@ const SortMenu = () => {
           value={categorySelect}
           onChange={(e) => {
             dispatch(setCategorySelect(e.target.value));
-            console.log(e.target.value);
           }}
           options={categorySelectList}
         />
